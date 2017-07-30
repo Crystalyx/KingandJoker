@@ -1,0 +1,16 @@
+
+
+public class SkillRegistry
+{
+
+public static Hashtable<String,Skill> registry = new Hashtable<String,Skill>();
+
+public static void register(String id,Skill s)
+{
+if(!registry.containsKey(id))
+	registry.put(id,s);
+	else
+	Logger.warn("Skill with ID "+id+" is already registered");
+}
+
+}
