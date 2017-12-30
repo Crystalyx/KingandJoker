@@ -3,12 +3,12 @@ package Game.Inventory.Base;
 import java.util.ArrayList;
 import java.util.List;
 
+import Core.KIJCore;
 import Game.Inventory.Container;
 import Game.Inventory.GuiContainer;
 import Game.Inventory.IInventory;
 import Game.Inventory.PlayerInventory;
 import Game.Inventory.Slot;
-import Graphics.Main;
 import Utilities.Color;
 
 public class ContainerBase extends Container
@@ -29,18 +29,18 @@ public class ContainerBase extends Container
 	{
 		for (int i = 0; i < 5; i++)
 		{
-			this.addSlot(i, Main.p.inv, 9 + k, (int) (20 * (4 - i)) + l - this.ySize / 4);
+			this.addSlot(i, KIJCore.p.inv, 9 + k, (int) (20 * (4 - i)) + l - this.ySize / 4);
 		}
 		for (int i = 0; i < 5; i++)
 		{
-			this.addSlot(i + 5, Main.p.inv, 48 + (int) (20 * 7) + k, (int) (20 * (4 - i)) + l - this.ySize / 4);
+			this.addSlot(i + 5, KIJCore.p.inv, 48 + (int) (20 * 7) + k, (int) (20 * (4 - i)) + l - this.ySize / 4);
 		}
 
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 7; j++)
 			{
-				this.addSlot(38 + j - 7 * i, Main.p.inv, 39 + (int) (20 * j) + k, (int) (20 * i) + l - this.ySize / 4);
+				this.addSlot(38 + j - 7 * i, KIJCore.p.inv, 39 + (int) (20 * j) + k, (int) (20 * i) + l - this.ySize / 4);
 			}
 		}
 	}
@@ -65,58 +65,75 @@ public class ContainerBase extends Container
 	}
 
 	// =============SLOT==============
-	public void addSlot(int id, IInventory inv, int x, int y, int size)
+	public Slot addSlot(int id, IInventory inv, int x, int y, int size)
 	{
 		this.add(new GuiSlot(x - 2, y - 2, size, -1));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addHiddenSlot(int id, IInventory inv, int x, int y, int size, boolean hidden)
+	public Slot addHiddenSlot(int id, IInventory inv, int x, int y, int size, boolean hidden)
 	{
 		this.add(new GuiSlot(x - 2, y - 2, size, -1).setHidden(hidden));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addSlot(int id, IInventory inv, int x, int y)
+	public Slot addSlot(int id, IInventory inv, int x, int y)
 	{
 		this.add(new GuiSlot(x - 2, y - 2, -1));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addHiddenSlot(int id, IInventory inv, int x, int y, boolean hidden)
+	public Slot addHiddenSlot(int id, IInventory inv, int x, int y, boolean hidden)
 	{
 		this.add(new GuiSlot(x - 2, y - 2, -1).setHidden(hidden));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addSlot(int id, IInventory inv, int x, int y, int size, int type)
+	public Slot addSlot(int id, IInventory inv, int x, int y, int size, int type)
 	{
 		this.add(new GuiSlot(x - 2, y - 2, size, type));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addHiddenSlot(int id, IInventory inv, int x, int y, int size, int type, boolean hidden)
+	public Slot addHiddenSlot(int id, IInventory inv, int x, int y, int size, int type, boolean hidden)
 	{
-		this.add(new GuiSlot(x - 2, y - 2, size, type));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		this.add(new GuiSlot(x - 2, y - 2, size, type).setHidden(hidden));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addSlot(int id, int type, IInventory inv, int x, int y)
+	public Slot addSlot(int id, int type, IInventory inv, int x, int y)
 	{
-		this.add(new GuiSlot(x - 2, y - 2, GuiContainer.sside-2, type));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		this.add(new GuiSlot(x - 2, y - 2, GuiContainer.sside - 2, type));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
-	public void addHiddenSlot(int id, int type, IInventory inv, int x, int y, boolean hidden)
+	public Slot addHiddenSlot(int id, int type, IInventory inv, int x, int y, boolean hidden)
 	{
-		this.add(new GuiSlot(x - 2, y - 2, GuiContainer.sside-2, type));
-		this.addSlotToContainer(new Slot(id, x, y, inv));
+		this.add(new GuiSlot(x - 2, y - 2, GuiContainer.sside - 2, type).setHidden(hidden));
+		Slot s = new Slot(id, x, y, inv);
+		this.addSlotToContainer(s);
+		return s;
 	}
 
 	// =============TEXT==============
 	public void addText(String text, int x, int y, int sizex, int sizey)
 	{
-		this.add(new GuiText(text, x, y, sizex, sizey));
+		GuiText gt = new GuiText(text, x, y, sizex, sizey);
+		this.add(gt);
 	}
 
 	public void addText(String text, int x, int y, int sizex, int sizey, boolean back)

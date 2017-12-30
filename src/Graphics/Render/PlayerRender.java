@@ -1,12 +1,19 @@
 package Graphics.Render;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import Game.Entities.Entity;
-import Game.Inventory.GuiContainer;
+import Core.KIJCore;
+import Game.ItemStack;
+import Game.Entities.API.Entity;
+import Game.Items.Laser;
+import Game.Items.API.ItemGun;
 import Graphics.GUI;
-import Graphics.Main;
-import Graphics.Sprite;
+import Graphics.Icon;
+import Math.Vec.Vec2;
+import Registry.Binds;
+import Utilities.AABB2;
+import Utilities.Graph;
 import Utilities.Tessellator;
 
 public class PlayerRender extends Render
@@ -16,71 +23,76 @@ public class PlayerRender extends Render
 	{
 		Tessellator t = Tessellator.instance;
 
-		if (Main.p.life <= 0)
+		if (KIJCore.p.life <= 0)
 		{
 			GL11.glColor3d(1d, 0, 0);
 		}
-		if (Main.p.needTrace)
-		{
-			Sprite.trace.getTexture().bind();
 
-			for (int i = 0; i < Main.p.trace; i++)
+		if (KIJCore.p.needTrace)
+		{
+			for (int i = 0; i < KIJCore.p.trace; i++)
 			{
 				GL11.glPushMatrix();
-				GL11.glColor4d(1, 1, 1, 1d / Main.p.trace * i);
+				GL11.glColor4d(1, 1, 1, (1d / KIJCore.p.trace) * i);
 
-				t.start(GL11.GL_QUADS);
-				t.addVertexWithUV(Main.p.xs[i] - GUI.PLAYER_WIDTH / 2, Main.p.ys[i], 0, 1);
-				t.addVertexWithUV(Main.p.xs[i] + GUI.PLAYER_WIDTH / 2, Main.p.ys[i], 1, 1);
-				t.addVertexWithUV(Main.p.xs[i] + GUI.PLAYER_WIDTH / 2, Main.p.ys[i] + GUI.PLAYER_HEIGHT, 1, 0);
-				t.addVertexWithUV(Main.p.xs[i] - GUI.PLAYER_WIDTH / 2, Main.p.ys[i] + GUI.PLAYER_HEIGHT, 0, 0);
-				t.draw();
+				drawBody(t);
 
-				GL11.glColor4d(1, 1, 1, 1);
 				GL11.glPopMatrix();
 			}
 		}
-		Sprite.getSprite("bodies/" + Main.p.body).getTexture().bind();
+		GL11.glColor4d(1, 1, 1, 1);
 
-		t.start(GL11.GL_QUADS);
-		t.addVertexWithUV(Main.p.pos.x - GUI.PLAYER_WIDTH / 2, Main.p.pos.y, 0, 1);
-		t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2, Main.p.pos.y, 1, 1);
-		t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2, Main.p.pos.y + GUI.PLAYER_HEIGHT, 1, 0);
-		t.addVertexWithUV(Main.p.pos.x - GUI.PLAYER_WIDTH / 2, Main.p.pos.y + GUI.PLAYER_HEIGHT, 0, 0);
-		t.draw();
+		drawBody(t);
 
-		Sprite.getSprite("heads/" + Main.p.head).getTexture().bind();
-
-		t.start(GL11.GL_QUADS);
-		t.addVertexWithUV(Main.p.pos.x - GUI.PLAYER_WIDTH / 2, Main.p.pos.y, 0, 1);
-		t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2, Main.p.pos.y, 1, 1);
-		t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2, Main.p.pos.y + GUI.PLAYER_HEIGHT, 1, 0);
-		t.addVertexWithUV(Main.p.pos.x - GUI.PLAYER_WIDTH / 2, Main.p.pos.y + GUI.PLAYER_HEIGHT, 0, 0);
-		t.draw();
-
-		Sprite.getSprite("hats/" + Main.p.hat).getTexture().bind();
-
-		t.start(GL11.GL_QUADS);
-		t.addVertexWithUV(Main.p.pos.x - GUI.PLAYER_WIDTH / 2, Main.p.pos.y, 0, 1);
-		t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2, Main.p.pos.y, 1, 1);
-		t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2, Main.p.pos.y + GUI.PLAYER_HEIGHT, 1, 0);
-		t.addVertexWithUV(Main.p.pos.x - GUI.PLAYER_WIDTH / 2, Main.p.pos.y + GUI.PLAYER_HEIGHT, 0, 0);
-		t.draw();
-
-		if (Main.p.inv.getStackInSlot(Main.p.hotselect) != null)
-		{
-			Main.p.inv.getStackInSlot(Main.p.hotselect).item.icon.getTexture().bind();
-			t.start(GL11.GL_QUADS);
-			t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2 - GuiContainer.sside, Main.p.pos.y + GUI.PLAYER_HEIGHT, 0, 1);
-			t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2 + GuiContainer.sside, Main.p.pos.y + GUI.PLAYER_HEIGHT, 1, 1);
-			t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2 + GuiContainer.sside, Main.p.pos.y + GUI.PLAYER_HEIGHT + GuiContainer.sside * 2, 1, 0);
-			t.addVertexWithUV(Main.p.pos.x + GUI.PLAYER_WIDTH / 2 - GuiContainer.sside, Main.p.pos.y + GUI.PLAYER_HEIGHT + GuiContainer.sside * 2, 0, 0);
-			t.draw();
-		}
-		if (Main.p.life <= 0)
+		if (KIJCore.p.life <= 0)
 		{
 			GL11.glColor3d(1d, 1, 1);
 		}
+
+	}
+
+	public void drawBody(Tessellator t)
+	{
+		GL11.glPushMatrix();
+		Vec2 v = KIJCore.p.pos;
+		GL11.glTranslated(v.x, v.y, 0);
+		GL11.glScaled(1.5, 1.5, 1.5);
+		AABB2 ab = new Vec2().extendBoth(GUI.PLAYER_WIDTH / 2, GUI.PLAYER_HEIGHT / 2);
+
+		int mx = Mouse.getX();
+		int my = Mouse.getY();
+		double dx = mx - KIJCore.p.pos.x;
+		double dy = my - KIJCore.p.pos.y;
+
+		ItemStack is = KIJCore.p.getCurrentStack();
+
+		if (is != null)
+		{
+			if (is.item instanceof ItemGun)
+			{
+				GL11.glPushMatrix();
+				GL11.glRotated(Math.atan2(dy, dx) * 180 / Math.PI, 0, 0, 1);
+				GL11.glTranslated(5, 0, 0);
+
+				if (is.item instanceof Laser && Binds.pressed(KIJCore.SETTINGS.keyAttack) && KIJCore.p.energy >= 5)
+				{
+					AABB2 lb = new Vec2(0, -2).extend(1200, 4);
+					Icon.getIcon("Laser").bind();
+					Graph.renderSqr(lb);
+				}
+
+				((ItemGun) is.item).gun.bind();
+
+				Graph.renderSqr(ab);
+
+				GL11.glPopMatrix();
+			}
+		}
+
+		Icon.getIcon("player/" + KIJCore.p.base).bind();
+		Graph.renderSqr(ab);
+
+		GL11.glPopMatrix();
 
 	}
 

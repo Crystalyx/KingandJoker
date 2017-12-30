@@ -2,19 +2,26 @@ package Game.Entities;
 
 import Game.Entities.AI.AIRangedAttack;
 import Game.Entities.AI.AIRangedFollow;
+import Game.Entities.API.Damage;
+import Game.Entities.API.Entity;
+import Game.Entities.API.EntityLiving;
+import Game.Entities.API.IRangedAttacker;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.SharedModifiers;
+import Game.Entities.Throwable.InducedMithrillium;
 import Graphics.GUI;
-import Graphics.Sprite;
+import Graphics.Icon;
+import Math.Vec.Vec2;
 import Utilities.Utils;
-import Utilities.Vec2;
 
 public class InductiveCore extends EntityLiving implements IRangedAttacker
 {
 
 	public InductiveCore(Vec2 pos)
 	{
-		super(pos, 48, 48, Sprite.getSprite("mobs/induction_Core"));
+		super(pos, 48, 48, Icon.getIcon("mobs/induction_Core"));
+		this.life = this.maxlife = 10000;
+
 		Modifier fly = new Modifier(SharedModifiers.AbilityFly, "ICORE-BASE", 1, 0);
 		this.applyModifier(fly);
 		this.addAI(new AIRangedAttack(Player.class, 800, 100));
@@ -49,7 +56,7 @@ public class InductiveCore extends EntityLiving implements IRangedAttacker
 		{
 			IM[i] = new InducedMithrillium(this, i, new Damage().setEntityDamage(this, 20), IMP[i]);
 
-			GUI.croom.addObj(IM[i]);
+			GUI.room.addObj(IM[i]);
 		}
 	}
 
@@ -74,7 +81,7 @@ public class InductiveCore extends EntityLiving implements IRangedAttacker
 	@Override
 	public boolean performRangedAttack(EntityLiving target)
 	{
-		this.IM[Utils.r.nextInt(this.IM.length)].Attack(Vec2.getCenteredPos(target));
+		this.IM[Utils.r.nextInt(this.IM.length)].Attack(target.pos);
 		return true;
 	}
 

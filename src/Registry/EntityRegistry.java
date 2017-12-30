@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import Game.Entities.Entity;
-import Game.Entities.EntityArrow;
-import Game.Entities.EntityItem;
-import Game.Entities.InducedMithrillium;
 import Game.Entities.InductiveCore;
 import Game.Entities.Manequen;
 import Game.Entities.Player;
-import Game.Entities.Sparkle;
 import Game.Entities.Sparkler;
+import Game.Entities.Swarm;
+import Game.Entities.API.Entity;
+import Game.Entities.API.EntityArrow;
+import Game.Entities.API.EntityItem;
+import Game.Entities.Throwable.Cannonball;
+import Game.Entities.Throwable.Fireball;
+import Game.Entities.Throwable.InducedMithrillium;
+import Game.Entities.Throwable.LaserPart;
+import Game.Entities.Throwable.Lightingball;
+import Game.Entities.Throwable.Sparkle;
 import Utilities.Logger;
 
 public class EntityRegistry
@@ -27,6 +32,11 @@ public class EntityRegistry
 		addEntityMapping(InductiveCore.class, 5, true);
 		addEntityMapping(InducedMithrillium.class, 6, true);
 		addEntityMapping(EntityArrow.class, 7, true);
+		addEntityMapping(Swarm.class, 8, true);
+		addEntityMapping(Cannonball.class, 9, true);
+		addEntityMapping(Lightingball.class, 10, true);
+		addEntityMapping(Fireball.class, 11, true);
+		addEntityMapping(LaserPart.class, 12, true);
 
 	}
 

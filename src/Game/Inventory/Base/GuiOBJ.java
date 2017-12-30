@@ -1,6 +1,6 @@
 package Game.Inventory.Base;
 
-import Graphics.Sprite;
+import Graphics.Icon;
 
 public class GuiOBJ
 {
@@ -12,10 +12,10 @@ public class GuiOBJ
 	public int type = -1;
 	public boolean hidden = false;
 
-	public Sprite CustomTexture = null;
+	public Icon CustomTexture = null;
 	public boolean custText = false;
-	public static Sprite baseTexture = Sprite.getSprite("guibases/base");
-	public static final Sprite vanillaTexture = Sprite.getSprite("guibases/base");
+	public static Icon baseTexture = Icon.getIcon("guibases/base");
+	public static final Icon vanillaTexture = Icon.getIcon("guibases/base");
 
 	public GuiBase gui;
 
@@ -37,13 +37,13 @@ public class GuiOBJ
 
 	public void setCustomTexture(String way)
 	{
-		this.CustomTexture = Sprite.getSprite(way);
+		this.CustomTexture = Icon.getIcon(way);
 		this.custText = true;
 	}
 
 	public static void setBaseTexture(String way)
 	{
-		baseTexture = Sprite.getSprite(way);
+		baseTexture = Icon.getIcon(way);
 	}
 
 	public void disableCustomTexture()

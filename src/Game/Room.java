@@ -6,38 +6,45 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import Game.Entities.Entity;
-import Game.Entities.EntityLiving;
-import Game.Entities.EntityThrowable;
+import Core.KIJCore;
 import Game.Entities.Player;
+import Game.Entities.API.Entity;
+import Game.Entities.API.EntityLiving;
+import Game.Entities.API.EntityThrowable;
 import Graphics.GUI;
-import Graphics.Main;
+import Graphics.Icon;
 import Graphics.RenderUtils;
-import Graphics.Sprite;
+import Math.Vec.Vec2;
 import Registry.Binds;
+import Registry.BorderRenderRegistry;
 import Registry.EntityRegistry;
 import Registry.RenderRegistry;
-import Utilities.AABB;
+import Utilities.AABB2;
+import Utilities.Graph;
 import Utilities.Logger;
 import Utilities.Tessellator;
 import Utilities.Utils;
-import Utilities.Vec2;
 
 public class Room
 {
 	public List<Entity> objs = new ArrayList<Entity>();
+	public List<Border> bords = new ArrayList<Border>();
+	public Border[][] gunbords = new Border[GUI.SCREEN_WIDTH / 50][GUI.SCREEN_HEIGHT / 50];
 
-	public int height = 500;
 	public int width = GUI.SCREEN_WIDTH;
+	public int height = GUI.SCREEN_HEIGHT - 150;
+	public int slowness = 100;
 
 	public Room()
 	{
+		height = GUI.SCREEN_HEIGHT - 150;
 	}
 
-	public Room(int width, int height)
+	public Room(int width, int height, int slowness)
 	{
 		this.height = height;
 		this.width = width;
+		this.slowness = slowness;
 	}
 
 	public void addObj(Entity o)
@@ -51,73 +58,105 @@ public class Room
 		this.objs.remove(o);
 	}
 
-	public Sprite top = Sprite.grass;
-	public Sprite under = Sprite.dirt;
-	public Sprite back = Sprite.sky;
+	public void addBorder(Border o)
+	{
+		this.bords.add(o);
+	}
+
+	public void leverBorder(int x, int y)
+	{
+		if (gunbords[x][y] != null)
+		{
+			this.bords.remove(gunbords[x][y]);
+			gunbords[x][y] = null;
+		}
+		else
+		{
+			Border b = new Border(new Vec2(Math.floorDiv(x * 50 + 25, 50) * 50, Math.floorDiv(y * 50 + 25, 50) * 50), 50, 50, Icon.getIcon("metal"));
+			GUI.room.addBorder(b);
+			gunbords[x][y] = b;
+		}
+	}
+
+	public void removeBorder(Border o)
+	{
+		this.bords.remove(o);
+	}
 
 	public void draw()
 	{
 		Tessellator t = GUI.t;
 
-		Sprite.sky.getTexture().bind();
+		// Icon.sky.getTexture().bind();
+
+		Icon.getIcon("floor").bind();
 		int h = height;
 		int w = width;
 
 		t.start(GL11.GL_QUADS);
-		t.addVertexWithUV(0, 0, 0, 1);
-		t.addVertexWithUV(w, 0, 1, 1);
-		t.addVertexWithUV(w, h * 2, 1, 0);
-		t.addVertexWithUV(0, h * 2, 0, 0);
+		t.addVertexWithUV(0, h, 0, 1);
+		t.addVertexWithUV(w, h, 1, 1);
+		t.addVertexWithUV(w, 0, 1, 0);
+		t.addVertexWithUV(0, 0, 0, 0);
 		t.draw();
 
 		int s = 32;
 		int n = w / s + 1;
 		int gh = 58;
 
-		top.getTexture().bind();
-		for (int i = 0; i < n; i++)
-		{
-			t.start(GL11.GL_QUADS);
-
-			t.addVertexWithUV(0 + s * i, 0 + gh, 0, 1);
-			t.addVertexWithUV(s + s * i, 0 + gh, 1, 1);
-			t.addVertexWithUV(s + s * i, s + gh, 1, 0);
-			t.addVertexWithUV(0 + s * i, s + gh, 0, 0);
-
-			t.draw();
-		}
-		int m = h / s + 1;
-		under.getTexture().bind();
-		for (int i = 0; i < n; i++)
-		{
-			for (int j = 0; j < m; j++)
-			{
-				t.start(GL11.GL_QUADS);
-
-				t.addVertexWithUV(0 + s * i, 0 + gh - s - j * s, 0, 1);
-				t.addVertexWithUV(s + s * i, 0 + gh - s - j * s, 1, 1);
-				t.addVertexWithUV(s + s * i, s + gh - s - j * s, 1, 0);
-				t.addVertexWithUV(0 + s * i, s + gh - s - j * s, 0, 0);
-
-				t.draw();
-			}
-		}
-
 		for (Entity obj : objs)
 		{
 			RenderRegistry.getRender(obj.getRenderType()).render(obj);
 
-			if (obj instanceof EntityLiving)
-			{
-				drawHealthBar(obj);
-				drawManaBar(obj);
-			}
-
-			if (Binds.pressed(Main.SETTINGS.keyDebug))
+			if (Binds.pressed(KIJCore.SETTINGS.keyDebug))
 			{
 				this.drawDebug(obj);
 			}
 		}
+		for (Border bord : bords)
+		{
+			BorderRenderRegistry.getRender(bord.getRenderType()).render(bord);
+		}
+
+		Icon.getIcon("toolbox").bind();
+		t.start(GL11.GL_QUADS);
+		t.addVertexWithUV(0, h, 0, 1);
+		t.addVertexWithUV(w, h, 1, 1);
+		t.addVertexWithUV(w, h + 150, 1, 0);
+		t.addVertexWithUV(0, h + 150, 0, 0);
+		t.draw();
+
+		int barWidth = 530;
+		int barHeight = 50;
+
+		double barU = 1;
+		double barV = 0.5;
+
+		double Uborder = 5d / 1024d;
+		double border = barWidth * 5d / 1024d;
+
+		double l = KIJCore.p.life > 0 ? KIJCore.p.life : 5 * 5d / 256d + border / 2;
+		double e = KIJCore.p.energy > 0 ? KIJCore.p.energy : 3 * 5d / 256d + border / 2;
+
+		double health = barWidth * (l / (double) KIJCore.p.maxlife);
+		double energy = barWidth * (e / (double) KIJCore.p.maxenergy);
+
+		AABB2 uvhollow = new Vec2().extend(barU, barV);
+		AABB2 uvfull = new Vec2(Uborder, barV).extend(barU - 2 * Uborder, barV);
+
+		AABB2 healthbb = new Vec2(60, h + 90).extend(barWidth, barHeight);
+		AABB2 chealthbb = new Vec2(60 + border, h + 90).extend(health - border * 2, barHeight);
+
+		AABB2 energybb = new Vec2(60, h + 70 - barHeight).extend(barWidth, barHeight);
+		AABB2 cenergybb = new Vec2(60 + border, h + 70 - barHeight).extend(energy - border * 2, barHeight);
+
+		Icon.getIcon("healthbar").bind();
+		Graph.renderSqrWithUV(healthbb, uvhollow);
+		Graph.renderSqrWithUV(chealthbb, uvfull);
+
+		Icon.getIcon("energybar").bind();
+		Graph.renderSqrWithUV(energybb, uvhollow);
+		Graph.renderSqrWithUV(cenergybb, uvfull);
 	}
 
 	public void updateRoom()
@@ -141,86 +180,93 @@ public class Room
 				obj.update(GUI.time);
 				if (EntityRegistry.movingEntities.contains(obj.getClass()))
 				{
-					moveObj(obj);
+					for (int i = 0; i < slowness; i++)
+					{
+						moveObj(obj, slowness);
+					}
 				}
 				obj.updateModifiers();
 			}
 		}
 	}
 
-	public static void moveObj(Entity obj)
+	public void moveObj(Entity obj, int slowness)
 	{
-		if (!obj.g && !obj.ableToFly)
-		{
-			obj.velocity = obj.velocity.add(obj.jt);
-		}
+		if (obj instanceof Player)
+			obj.vel = obj.vel.mult(0.3, 0.3);
 
-		if (!obj.g && obj.ableToFly)
+		Vec2 v = obj.vel.div(slowness);
+
+		Vec2 vx = new Vec2(v.x, 0);
+		Vec2 vy = new Vec2(0, v.y);
+
+		obj.pos = obj.pos.add(vx);
+
+		if (!obj.celestial)
 		{
-			if (obj instanceof Player)
+			boolean border = this.bords.stream().anyMatch(k -> obj.getBB().intersects(k.getBB()) || k.getBB().intersects(obj.getBB()));
+
+			if (border)
 			{
-				double lx = 1;
-				double ly = 1;
-				if (Binds.unpressed(Main.SETTINGS.keyJump) && Binds.unpressed(Main.SETTINGS.keyStrafe))
-				{
-					ly = 0.5;
-				}
-				if (Binds.unpressed(Main.SETTINGS.keyLeft) && Binds.unpressed(Main.SETTINGS.keyRight))
-				{
-					lx = 0.3;
-				}
-				obj.velocity = obj.velocity.modif(lx, ly);
+				obj.pos = obj.pos.sub(vx);
+				obj.vel.x = 0;
+			}
+		}
+		obj.pos = obj.pos.add(vy);
+		if (!obj.celestial)
+		{
+			boolean border = this.bords.stream().anyMatch(k -> obj.getBB().intersects(k.getBB()) || k.getBB().intersects(obj.getBB()));
+
+			if (border)
+			{
+				obj.pos = obj.pos.sub(vy);
+				obj.vel.y = 0;
 
 			}
 		}
 
-		if (obj.g)
+		if ((obj.pos.x - 2 - obj.width / 2 < 0 && v.x < 0))
 		{
-			obj.pos.y = 90;
-			if (obj.velocity.y < 0)
-				obj.velocity.y = 0;
+			// obj.pos.x = width - 1;
+			obj.pos.x -= v.x;
+			obj.vel.x = 0;
 		}
-
-		if ((obj instanceof Player) && Binds.unpressed(Main.SETTINGS.keyLeft) && Binds.unpressed(Main.SETTINGS.keyRight) && !obj.ableToFly)
+		if ((obj.pos.x + 2 + obj.width / 2 > this.width && v.x > 0))
 		{
-			obj.velocity = obj.velocity.modif(0.3 + Utils.boolToNum(!obj.g, 0.7, 0), 1);
+			obj.pos.x -= v.x;
+			obj.vel.x = 0;
 		}
-
-		obj.pos = obj.pos.add(obj.velocity);
-
-		if ((obj.pos.x - obj.width / 2 < 0 && obj.velocity.x < 0) || (obj.pos.x + obj.width / 2 > GUI.croom.width && obj.velocity.x > 0))
+		if ((obj.pos.y - 2 - obj.height / 2 < 0 && v.y < 0))
 		{
-			obj.pos.x -= obj.velocity.x;
-			obj.velocity.x = 0;
+			obj.pos.y -= v.y;
+			obj.vel.y = 0;
+		}
+		if ((obj.pos.y + 2 + obj.height / 2 > this.height && v.y > 0))
+		{
+			obj.pos.y -= v.y;
+			obj.vel.y = 0;
 		}
 	}
 
-	public List getEntitiesWithinSquare(Class<? extends Entity> e, AABB aabb)
+	public List getEntitiesWithinSquare(Class e, AABB2 aabb)
 	{
 		List<Entity> l = new ArrayList<Entity>();
-		for (int j = 0; j < objs.size(); j++)
+		objs.stream().filter(k -> k.isIn(aabb)).filter(k -> (k instanceof Entity)).forEach(k ->
 		{
-			if (aabb.contains(objs.get(j)))
+			if (e.isInstance(k))
 			{
-				if (objs.get(j) instanceof Entity)
-				{
-					Entity obj = (Entity) objs.get(j);
-					if (e.isInstance(obj))
-					{
-						l.add(obj);
-					}
-				}
+				l.add(k);
 			}
-		}
+		});
 		return l;
 	}
 
-	public List getEntitiesWithinSquareExcluding(Class<? extends Entity> e, AABB aabb)
+	public List getEntitiesWithinSquareExcluding(Class e, AABB2 aabb)
 	{
 		List<Entity> l = new ArrayList<Entity>();
 		for (int j = 0; j < objs.size(); j++)
 		{
-			if (aabb.contains(objs.get(j)))
+			if (objs.get(j).isIn(aabb))
 			{
 				if (objs.get(j) instanceof Entity)
 				{
@@ -235,12 +281,12 @@ public class Room
 		return l;
 	}
 
-	public List getLivingEntitiesWithinSquareExcluding(Class<? extends Entity> e, AABB aabb)
+	public List getLivingEntitiesWithinSquareExcluding(Class<? extends Entity> e, AABB2 aabb)
 	{
 		List<EntityLiving> l = new ArrayList<EntityLiving>();
 		for (int j = 0; j < objs.size(); j++)
 		{
-			if (aabb.contains(objs.get(j)))
+			if (objs.get(j).isIn(aabb))
 			{
 				if (objs.get(j) instanceof EntityLiving)
 				{
@@ -258,7 +304,7 @@ public class Room
 	public void drawDebug(Entity obj)
 	{
 		Tessellator t = Tessellator.instance;
-		Sprite.sqr.getTexture().bind();
+		Icon.sqr.getTexture().bind();
 		GL11.glColor3d(1, 0, 0);
 		Vec2 v = obj.pos;
 
@@ -286,10 +332,15 @@ public class Room
 		t.addVertexWithUV(GUI.SCREEN_WIDTH, v.y - 1 + obj.height / 2, 0, 1);
 		t.draw();
 
-		Vec2 vaabb = obj.pos.sub(new Vec2(obj.width / 2, 0));
-		AABB ab = vaabb.extend(new Vec2(obj.width, obj.height));
+		Vec2 vaabb = obj.pos.sub(new Vec2(obj.width / 2, obj.height / 2));
+		AABB2 ab = vaabb.extend(new Vec2(obj.width, obj.height));
 
 		RenderUtils.renderAABB(ab);
+
+		Vec2 vp = KIJCore.p.pos.add(new Vec2(0, 0));
+
+		AABB2 range = vp.extendBoth(new Vec2(KIJCore.p.width, KIJCore.p.height));
+		RenderUtils.renderAABB(range);
 
 		GL11.glColor3d(0, 1d, 0);
 
@@ -301,56 +352,8 @@ public class Room
 		GL11.glColor3d(1, 1, 1);
 	}
 
-	public void drawHealthBar(Entity obj)
+	public void setSlowness(int slowness)
 	{
-		Tessellator t = Tessellator.instance;
-		Sprite.getSprite("health_bar").getTexture().bind();
-
-		double part = ((EntityLiving) obj).life / ((EntityLiving) obj).maxlife;
-		double length = part * obj.width;
-		double pot = obj.width * 0.1;
-		t.start(GL11.GL_QUADS);
-
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height, 0, 0);
-		t.addVertexWithUV(obj.pos.x + obj.width / 2, obj.pos.y + obj.height, 1, 0);
-		t.addVertexWithUV(obj.pos.x + obj.width / 2, obj.pos.y + obj.height + pot, 1, 0.5);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height + pot, 0, 0.5);
-
-		t.draw();
-		t.start(GL11.GL_QUADS);
-
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height, 0, 1);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2 + length, obj.pos.y + obj.height, part, 1);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2 + length, obj.pos.y + obj.height + pot, part, 0.5);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height + pot, 0, 0.5);
-
-		t.draw();
-	}
-
-	public void drawManaBar(Entity obj)
-	{
-		double part = ((EntityLiving) obj).mana / ((EntityLiving) obj).maxmana;
-		double length = part * obj.width;
-		double pot = obj.width * 0.1;
-
-		Tessellator t = Tessellator.instance;
-		Sprite.getSprite("mana_bar").getTexture().bind();
-
-		t.start(GL11.GL_QUADS);
-
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height + pot, 0, 0);
-		t.addVertexWithUV(obj.pos.x + obj.width / 2, obj.pos.y + obj.height + pot, 1, 0);
-		t.addVertexWithUV(obj.pos.x + obj.width / 2, obj.pos.y + obj.height + pot * 2, 1, 0.5);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height + pot * 2, 0, 0.5);
-
-		t.draw();
-		t.start(GL11.GL_QUADS);
-
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height + pot, 0, 1);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2 + length, obj.pos.y + obj.height + pot, part, 1);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2 + length, obj.pos.y + obj.height + pot * 2, part, 0.5);
-		t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height + pot * 2, 0, 0.5);
-
-		t.draw();
+		this.slowness = slowness;
 	}
 }

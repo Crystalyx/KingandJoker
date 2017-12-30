@@ -2,10 +2,10 @@ package Game.Entities.AI;
 
 import java.util.List;
 
-import Game.Entities.EntityLiving;
-import Game.Entities.IRangedAttacker;
+import Game.Entities.API.EntityLiving;
+import Game.Entities.API.IRangedAttacker;
 import Graphics.GUI;
-import Utilities.Vec2;
+import Math.Vec.Vec2;
 
 public class AIRangedAttack extends AI
 {
@@ -18,7 +18,7 @@ public class AIRangedAttack extends AI
 			if (this.currTarget == null)
 			{
 				Vec2 ps = e.pos;
-				List<EntityLiving> l = GUI.croom.getEntitiesWithinSquare(this.target, ps.extendBoth(this.range));
+				List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(this.target, ps.extendBoth(this.range));
 				l.remove(e);
 				double min = 10000;
 				EntityLiving t = null;

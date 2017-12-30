@@ -2,9 +2,9 @@ package Graphics.Render;
 
 import org.lwjgl.opengl.GL11;
 
-import Game.Entities.Entity;
+import Game.Entities.API.Entity;
 import Graphics.GUI;
-import Graphics.Sprite;
+import Graphics.Icon;
 import Utilities.Tessellator;
 
 public class SparklerRender extends Render
@@ -14,10 +14,10 @@ public class SparklerRender extends Render
 	public void render(Entity obj)
 	{
 		GL11.glPushMatrix();
-		Tessellator t = Tessellator.instance;
-		Sprite s0 = Sprite.getSprite("mobs/sparkler_0");
-		Sprite s1 = Sprite.getSprite("mobs/sparkler_1");
-		Sprite s2 = Sprite.getSprite("mobs/sparkler_2");
+		Tessellator t = GUI.t;
+		Icon s0 = Icon.getIcon("mobs/sparkler_0");
+		Icon s1 = Icon.getIcon("mobs/sparkler_1");
+		Icon s2 = Icon.getIcon("mobs/sparkler_2");
 
 		double life = obj.lifeTime;
 
@@ -27,7 +27,8 @@ public class SparklerRender extends Render
 		double dx1 = 10 * Math.sin(-(GUI.time + life) / 16d + Math.PI / 3);
 		double dx2 = 10 * Math.sin(-(GUI.time + life) / 16d + 2 * Math.PI / 3);
 
-		GL11.glTranslated(obj.pos.x, dh / 2 + obj.pos.y, 0);
+		GL11.glTranslated(obj.pos.x, obj.pos.y, 0);
+		GL11.glScaled(1.5, 1.5, 1);
 
 		GL11.glPushMatrix();
 
@@ -42,7 +43,7 @@ public class SparklerRender extends Render
 		t.draw();
 		GL11.glPopMatrix();
 
-		GL11.glTranslated(0, -obj.height / 3, 0);
+		GL11.glTranslated(0, -obj.height / 5, 0);
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(dx1, 0, 0);
@@ -58,7 +59,7 @@ public class SparklerRender extends Render
 		t.draw();
 		GL11.glPopMatrix();
 
-		GL11.glTranslated(0, -obj.height / 3, 0);
+		GL11.glTranslated(0, -obj.height / 5, 0);
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(dx2, 0, 0);

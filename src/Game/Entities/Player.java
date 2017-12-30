@@ -3,30 +3,34 @@ package Game.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import Core.KIJCore;
 import Game.ItemStack;
 import Game.Skill;
-import Game.Inventory.InvUtils;
+import Game.Entities.API.Entity;
+import Game.Entities.API.EntityLiving;
+import Game.Entities.Modifiers.Modifier;
+import Game.Entities.Modifiers.SharedModifiers;
 import Game.Inventory.PlayerEquip;
 import Game.Inventory.PlayerInventory;
 import Graphics.GUI;
-import Graphics.Main;
+import Math.Vec.Vec2;
 import Registry.Binds;
-import Registry.Items;
-import Utilities.Logger;
 import Utilities.Tag;
 import Utilities.Utils;
-import Utilities.Vec2;
 
 public class Player extends EntityLiving
 {
 	public Player(Vec2 pos, double width, double height)
 	{
 		super(pos, width, height);
+		this.maxVelocity = new Vec2(480, 360);
 	}
 
 	public Player()
 	{
-		super(new Vec2(0, 90), GUI.PLAYER_WIDTH, GUI.PLAYER_HEIGHT);
+		super(new Vec2(0, 190), GUI.PLAYER_WIDTH, GUI.PLAYER_HEIGHT);
+		this.maxVelocity = new Vec2(480, 360);
+		this.applyModifier(new Modifier(SharedModifiers.Energy, "Player", 180, 0));
 	}
 
 	@Override
@@ -40,17 +44,21 @@ public class Player extends EntityLiving
 	public List<Skill> skills = new ArrayList<Skill>();
 	public PlayerInventory inv = new PlayerInventory();
 	public PlayerEquip equip = new PlayerEquip();
-	public int trace = 50;
+	public int trace = 500;
 	public int hotselect = 0;// 0<=hotselect <10
 	public double[] xs = new double[trace], ys = new double[trace];
-	public String body = "man";
-	public String head = "man";
+	public String base = "base";
+	public String gun = "lightning";
+	public boolean doublegun = false;
 	public String hat = "hat";
-	public boolean needTrace = false;
+	public boolean needTrace = true;
 
 	@Override
 	public void update(long time)
 	{
+		if (!Binds.pressed(KIJCore.SETTINGS.keyAttack))
+			this.addEnergy(1);
+
 		for (int i = 0; i < this.inv.getSizeInventory(); i++)
 		{
 			ItemStack is = this.inv.getStackInSlot(i);
@@ -70,35 +78,40 @@ public class Player extends EntityLiving
 		}
 
 		// this.ableToFly = InvUtils.contains(equip, Items.flybook);
-		if (InvUtils.contains(equip, Items.invincRing))
-		{
-			this.life = this.maxlife;
-		}
 
-		Vec2 v = this.pos.sub(new Vec2(this.width / 2, 0));
-		List<Entity> l = GUI.croom.getEntitiesWithinSquare(Entity.class, v.extend(new Vec2(this.width, this.height)));
+		Vec2 v = this.pos.add(new Vec2(0, this.height / 2));
+		List<Entity> l = GUI.room.getEntitiesWithinSquare(Entity.class, v.extendBoth(new Vec2(this.width, this.height)));
+
 		l.remove(this);
-		if (Binds.keyClick(Main.SETTINGS.keyAttack))
+		if (Binds.keyClick(KIJCore.SETTINGS.keyAttack))
 		{
 			if (this.getCurrentStack() != null)
 			{
 				this.getCurrentStack().item.onItemAttack(this, null);
 			}
 		}
-		if (Binds.keyClick(Main.SETTINGS.keyAttack) && !l.isEmpty() && (l.get(0) instanceof EntityLiving))
+
+		if (Binds.pressed(KIJCore.SETTINGS.keyAttack))
+		{
+			if (this.getCurrentStack() != null)
+			{
+				this.getCurrentStack().item.onItemUse(this);
+			}
+		}
+		if (Binds.keyClick(KIJCore.SETTINGS.keyAttack) && !l.isEmpty() && (l.get(0) instanceof EntityLiving))
 		{
 			attackEntityFrom((EntityLiving) l.get(0));
 		}
-		if (Binds.keyClick(Main.SETTINGS.keyInterract) && !l.isEmpty())
+		if (Binds.keyClick(KIJCore.SETTINGS.keyInterract) && !l.isEmpty())
 		{
 			l.get(0).interract(this);
 		}
 
-		if (Binds.keyClick(Main.SETTINGS.keyCycleL))
+		if (Binds.keyClick(KIJCore.SETTINGS.keyCycleL))
 		{
 			hotselect = Utils.limit(hotselect + 1, 0, 9);
 		}
-		if (Binds.keyClick(Main.SETTINGS.keyCycleR))
+		if (Binds.keyClick(KIJCore.SETTINGS.keyCycleR))
 		{
 			hotselect = Utils.limit(hotselect - 1, 0, 9);
 		}
@@ -140,7 +153,7 @@ public class Player extends EntityLiving
 		tag.add("Level", this.level);
 		tag.add("Strength", this.strength);
 		tag.add("Life", this.life);
-		tag.add("Mana", this.mana);
+		tag.add("Mana", this.energy);
 
 		tag.add("Skills", this.skills);
 
@@ -168,7 +181,7 @@ public class Player extends EntityLiving
 		this.level = tag.getInt("Level");
 		this.strength = tag.getInt("Strength");
 		this.life = tag.getInt("Life");
-		this.mana = tag.getInt("Mana");
+		this.energy = tag.getInt("Mana");
 
 		this.skills = tag.get("Skills");
 
@@ -183,5 +196,23 @@ public class Player extends EntityLiving
 		{
 			this.inv.inv[i] = ItemStack.read(inv, "Inventory_" + i);
 		}
+	}
+
+	public boolean consumeEnergy(double energy)
+	{
+		if (this.energy < energy)
+			return false;
+		this.energy -= energy;
+		return true;
+	}
+
+	public void addEnergy(double energy)
+	{
+		this.energy = Utils.limit(this.energy + energy, 0, this.maxenergy);
+	}
+
+	public void restoreEnergy(double energy)
+	{
+		this.energy = this.maxenergy;
 	}
 }

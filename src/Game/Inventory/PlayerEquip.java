@@ -1,6 +1,19 @@
 package Game.Inventory;
 
 import Game.ItemStack;
+import Game.Items.API.ItemAmulet;
+import Game.Items.API.ItemArtifact;
+import Game.Items.API.ItemBelt;
+import Game.Items.API.ItemBook;
+import Game.Items.API.ItemBoots;
+import Game.Items.API.ItemCape;
+import Game.Items.API.ItemChestplate;
+import Game.Items.API.ItemGem;
+import Game.Items.API.ItemGemPlate;
+import Game.Items.API.ItemGlove;
+import Game.Items.API.ItemHelmet;
+import Game.Items.API.ItemRing;
+import Game.Items.API.ItemShield;
 import Utilities.Tag;
 
 public class PlayerEquip implements IInventory
@@ -61,6 +74,40 @@ public class PlayerEquip implements IInventory
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is)
 	{
+		if (is != null)
+		{
+			switch (slot)
+			{
+			case (0):
+				return is.item instanceof ItemBelt;
+			case (1):
+				return is.item instanceof ItemRing;
+			case (2):
+				return is.item instanceof ItemRing;
+			case (3):
+				return is.item instanceof ItemAmulet;
+			case (4):
+				return is.item instanceof ItemBoots;
+			case (5):
+				return is.item instanceof ItemChestplate;
+			case (6):
+				return is.item instanceof ItemHelmet;
+			case (7):
+				return is.item instanceof ItemGlove;
+			case (8):
+				return is.item instanceof ItemShield;
+			case (9):
+				return is.item instanceof ItemCape;
+			case (10):
+				return is.item instanceof ItemGem;
+			case (11):
+				return is.item instanceof ItemBook;
+			case (12):
+				return is.item instanceof ItemArtifact;
+			case (13):
+				return is.item instanceof ItemGemPlate;
+			}
+		}
 		return true;
 	}
 

@@ -1,7 +1,7 @@
 package Game;
 
-import Game.Entities.EntityLiving;
-import Game.Entities.Entity;
+import Game.Entities.API.Entity;
+import Game.Entities.API.EntityLiving;
 
 public class Action
 {

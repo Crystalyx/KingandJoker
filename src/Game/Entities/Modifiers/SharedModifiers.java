@@ -3,7 +3,7 @@ package Game.Entities.Modifiers;
 public class SharedModifiers
 {
 	public static final ModifierBase Life = ModifierBase.createModifierBase("Life", 150, "Max Life");
-	public static final ModifierBase Mana = ModifierBase.createModifierBase("Mana", 60, "Max Mana");
+	public static final ModifierBase Energy = ModifierBase.createModifierBase("Mana", 60, "Max Mana");
 	public static final ModifierBase Damage = ModifierBase.createModifierBase("Damage", 15, "Damage");
 	public static final ModifierBase Armor = ModifierBase.createModifierBase("Armor", 0, "Armor");
 	public static final ModifierBase FireResist = ModifierBase.createModifierBase("FireResist", 0, "Fire Resistance");

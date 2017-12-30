@@ -1,26 +1,31 @@
 package Game;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
-import Game.Entities.EntityLiving;
 import Game.Entities.Player;
+import Game.Entities.API.EntityLiving;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.SharedModifiers;
-import Graphics.Sprite;
+import Graphics.Icon;
 
 public class Item
 {
 	public String name;
 	public int uid = -1;
 	public int price;
-	public Sprite icon;
+	public Icon icon;
 	public int maxSize;
 
-	public Hashtable<String, Modifier> modifiers = new Hashtable<String, Modifier>();
+	public HashMap<String, Modifier> modifiers = new HashMap<String, Modifier>();
 
-	public Item(String name, int price, Sprite icon)
+	public void addModifiers(List<Modifier> mods)
+	{
+		mods.stream().forEach(key -> this.modifiers.put(key.base.name, key));
+	}
+
+	public Item(String name, int price, Icon icon)
 	{
 		this.name = name;
 		this.price = price;
@@ -31,16 +36,16 @@ public class Item
 	public void update(ItemStack is, EntityLiving p, boolean equip, boolean inhand)
 	{
 		this.updateModifiers(is, equip, inhand);
-		Enumeration<String> enm = this.modifiers.keys();
-		while (enm.hasMoreElements())
+		Set<String> enm = this.modifiers.keySet();
+		enm.stream().forEach(key ->
 		{
-			Modifier v = (Modifier) modifiers.get(enm.nextElement());
+			Modifier v = this.modifiers.get(key);
 			if (((v.reqInHand && inhand) || !v.reqInHand) && ((v.reqEquip && equip) || !v.reqEquip))
 				p.applyModifier(v);
-		}
+		});
 	}
 
-	public void onItemUse()
+	public void onItemUse(Player p)
 	{
 
 	}
@@ -52,12 +57,12 @@ public class Item
 
 	public void setupModifiers()
 	{
-
+		this.modifiers.keySet().stream().forEach(key -> this.addModifier(this.modifiers.get(key)));
 	}
 
 	public void updateModifiers(ItemStack i, boolean equip, boolean inhand)
 	{
-
+		this.modifiers.keySet().stream().forEach(key -> this.addModifier(this.modifiers.get(key)));
 	}
 
 	public void addModifier(Modifier m)
@@ -80,7 +85,7 @@ public class Item
 
 		Modifier dlife = this.modifiers.get(SharedModifiers.Life.name);
 		addLine(l, dlife);
-		Modifier dmana = this.modifiers.get(SharedModifiers.Mana.name);
+		Modifier dmana = this.modifiers.get(SharedModifiers.Energy.name);
 		addLine(l, dmana);
 		Modifier ddamage = this.modifiers.get(SharedModifiers.Damage.name);
 		addLine(l, ddamage);

@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import org.lwjgl.opengl.GL11;
 
 import Utilities.Color;
+import Utilities.Graph;
 import Utilities.Tessellator;
 
 public class FontRenderer
@@ -220,7 +221,7 @@ public class FontRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
 		GL11.glScaled(0.125, 0.125, 1);
-		Sprite.getSprite("ascii").getTexture().bind();
+		Icon.getIcon("ascii").getTexture().bind();
 		char[] smbls = (s + "").toCharArray();
 		for (int i = 0; i < (s + "").length(); i++)
 		{
@@ -232,7 +233,7 @@ public class FontRenderer
 				{
 					i += 1;
 					Color c = Color.getColor(smbls[i] + "");
-					c.colorize();
+					Graph.colorize(c);
 				}
 			}
 			else
@@ -241,7 +242,7 @@ public class FontRenderer
 				GL11.glTranslated(64, 0, 0);
 			}
 		}
-		Color.clear();
+		Graph.clearColor();
 		GL11.glPopMatrix();
 	}
 
@@ -253,7 +254,7 @@ public class FontRenderer
 			id = chars.get(s);
 		}
 		else
-			id = 95;
+			id = 127;
 
 		int meta = Math.floorDiv(id, 16);
 		int beta = Math.floorMod(id, 16);
@@ -276,7 +277,7 @@ public class FontRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
 		GL11.glScaled(0.125, 0.125, 1);
-		Sprite.getSprite("ascii").getTexture().bind();
+		Icon.getIcon("ascii").getTexture().bind();
 		char[] smbls = (s + "").toCharArray();
 		for (int i = 0; i < smbls.length; i++)
 		{
@@ -288,7 +289,7 @@ public class FontRenderer
 				{
 					i += 1;
 					Color c = Color.getColor(smbls[i] + "");
-					c.colorize();
+					Graph.colorize(c);
 				}
 			}
 			else
@@ -297,7 +298,7 @@ public class FontRenderer
 				GL11.glTranslated(size * 4, 0, 0);
 			}
 		}
-		Color.clear();
+		Graph.clearColor();
 		GL11.glPopMatrix();
 	}
 
@@ -306,7 +307,7 @@ public class FontRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
 		GL11.glScaled(0.125, 0.125, 1);
-		Sprite.getSprite("ascii").getTexture().bind();
+		Icon.getIcon("ascii").getTexture().bind();
 
 		for (int i = 0; i < s.length(); i++)
 		{
@@ -326,7 +327,7 @@ public class FontRenderer
 			id = chars.get(s);
 		}
 		else
-			id = 95;
+			id = 127;
 
 		int meta = Math.floorDiv(id, 16);
 		int beta = Math.floorMod(id, 16);

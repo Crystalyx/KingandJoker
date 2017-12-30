@@ -1,6 +1,6 @@
 package Game.Entities.AI;
 
-import Game.Entities.EntityLiving;
+import Game.Entities.API.EntityLiving;
 
 public abstract class AI
 {

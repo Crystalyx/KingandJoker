@@ -2,9 +2,9 @@ package Game.Entities.AI;
 
 import java.util.List;
 
-import Game.Entities.EntityLiving;
+import Game.Entities.API.EntityLiving;
 import Graphics.GUI;
-import Utilities.Vec2;
+import Math.Vec.Vec2;
 
 public class AIAttackOnCollide extends AI
 {
@@ -21,7 +21,7 @@ public class AIAttackOnCollide extends AI
 	public double sRange;
 	public double aRange;
 	public double eRange;
-	public EntityLiving currTarget;
+	public EntityLiving currTarget = null;
 	public double velocity = 1;
 
 	@Override
@@ -30,7 +30,7 @@ public class AIAttackOnCollide extends AI
 		if (this.currTarget == null)
 		{
 			Vec2 ps = e.pos;
-			List<EntityLiving> l = GUI.croom.getEntitiesWithinSquare(this.target, ps.extendBoth(this.sRange));
+			List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(this.target, ps.extendBoth(this.sRange));
 			double min = 10000;
 			EntityLiving t = null;
 			for (int i = 0; i < l.size(); i++)
@@ -60,16 +60,17 @@ public class AIAttackOnCollide extends AI
 			{
 				if (ev.length() <= this.aRange)
 				{
-					this.currTarget.attackEntityFrom(e);
+					e.attackEntityFrom(this.currTarget);
 				}
 			}
 		}
-		if (this.currTarget != null)
-		{
-			Vec2 ev = this.currTarget.pos.sub(e.pos);
-			ev.normalize();
-			e.velocity = e.velocity.add(ev.modif(this.velocity / 10d, e.ableToFly ? this.velocity / 10d : 0));
-		}
+		// if (this.currTarget != null)
+		// {
+		// Vec2 ev = this.currTarget.pos.sub(e.pos);
+		// ev.normalize();
+		// e.vel = e.vel.add(ev.multiply(this.velocity / 10d, e.ableToFly ?
+		// this.velocity / 10d : 0));
+		// }
 	}
 
 }

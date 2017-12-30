@@ -15,6 +15,10 @@ public class Binds
 	public static boolean rightClick = false;
 	public static boolean rightUnpress = true;
 
+	public static final int MOUSE_LEFT = 777;
+	public static final int MOUSE_RIGHT = 778;
+	public static final int MOUSE_MIDDLE = 779;
+
 	public static void register()
 	{
 		registerKey(Keyboard.KEY_LSHIFT);
@@ -27,15 +31,18 @@ public class Binds
 		while (en.hasMoreElements())
 		{
 			Integer key = (Integer) en.nextElement();
-			if (Keyboard.isKeyDown(key))
+			if (key != MOUSE_LEFT && key != MOUSE_MIDDLE && key != MOUSE_RIGHT)
 			{
-				clicks.put(key, unpresses.get(key));
-				unpresses.put(key, !Keyboard.isKeyDown(key));
-			}
-			else
-			{
-				clicks.put(key, false);
-				unpresses.put(key, true);
+				if (Keyboard.isKeyDown(key))
+				{
+					clicks.put(key, unpresses.get(key));
+					unpresses.put(key, !Keyboard.isKeyDown(key));
+				}
+				else
+				{
+					clicks.put(key, false);
+					unpresses.put(key, true);
+				}
 			}
 		}
 
@@ -70,16 +77,16 @@ public class Binds
 
 	public static boolean keyClick(int key)
 	{
-		return clicks.get(key);
+		return key == MOUSE_LEFT ? leftClick : (key == MOUSE_RIGHT ? rightClick : clicks.get(key));
 	}
 
 	public static boolean unpressed(int key)
 	{
-		return unpresses.get(key);
+		return key == MOUSE_LEFT ? leftUnpress : (key == MOUSE_RIGHT ? rightUnpress : unpresses.get(key));
 	}
 
 	public static boolean pressed(int key)
 	{
-		return !unpresses.get(key);
+		return !unpressed(key);
 	}
 }

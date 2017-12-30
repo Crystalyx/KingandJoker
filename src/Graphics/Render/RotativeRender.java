@@ -2,7 +2,7 @@ package Graphics.Render;
 
 import org.lwjgl.opengl.GL11;
 
-import Game.Entities.Entity;
+import Game.Entities.API.Entity;
 import Graphics.GUI;
 import Utilities.Tessellator;
 
@@ -19,7 +19,7 @@ public class RotativeRender extends Render
 			obj.getSprite().getTexture().bind();
 
 			GL11.glPushMatrix();
-			GL11.glTranslated(obj.pos.x, obj.pos.y + obj.height / 2, 0);
+			GL11.glTranslated(obj.pos.x, obj.pos.y, 0);
 			GL11.glRotated(obj.rotation, 0, 0, 1);
 
 			t.start(GL11.GL_QUADS);

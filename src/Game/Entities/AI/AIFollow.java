@@ -2,9 +2,9 @@ package Game.Entities.AI;
 
 import java.util.List;
 
-import Game.Entities.EntityLiving;
+import Game.Entities.API.EntityLiving;
 import Graphics.GUI;
-import Utilities.Vec2;
+import Math.Vec.Vec2;
 
 public class AIFollow extends AI
 {
@@ -22,14 +22,13 @@ public class AIFollow extends AI
 	public EntityLiving currTarget;
 	public double velocity = 1;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void updateAI(EntityLiving e)
 	{
 		if (this.currTarget == null)
 		{
 			Vec2 ps =e.pos;
-			List<EntityLiving> l = GUI.croom.getEntitiesWithinSquare(this.target, ps.extendBoth(this.sRange));
+			List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(this.target, ps.extendBoth(this.sRange));
 			double min = 10000;
 			EntityLiving t = null;
 			for (int i = 0; i < l.size(); i++)
@@ -61,7 +60,7 @@ public class AIFollow extends AI
 		{
 			Vec2 ev = this.currTarget.pos.sub(e.pos);
 			ev.normalize();
-			e.velocity = e.velocity.add(ev.modif(this.velocity / 10d, e.ableToFly ? this.velocity / 10d : 0));
+			e.vel = e.vel.add(ev.mult(this.velocity / 10d, e.ableToFly ? this.velocity / 10d : 0));
 		}
 	}
 

@@ -2,19 +2,19 @@ package Utilities;
 
 import org.lwjgl.opengl.GL11;
 
-import Graphics.Sprite;
+import Graphics.Icon;
 
 public class Tessellator
 {
 	public static boolean drawing = false;
 
 	public static Tessellator instance = new Tessellator();
-	
+
 	public void start(int type)
 	{
 		if (!drawing)
 		{
-			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glBegin(type);
 			drawing = true;
 		}
 	}
@@ -44,7 +44,7 @@ public class Tessellator
 		}
 	}
 
-	public void drawTexturedModalRect(int x, int y, int u, int v, int w, int h, Sprite icon)
+	public void drawTexturedModalRect(int x, int y, int u, int v, int w, int h, Icon icon)
 	{
 		icon.getTexture().bind();
 		this.start(GL11.GL_QUADS);

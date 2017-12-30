@@ -2,9 +2,10 @@ package Game.Inventory.Base;
 
 import org.lwjgl.opengl.GL11;
 
-import Utilities.Color;
+import API.IFocusable;
+import Utilities.AABB2;
 
-public class GuiText extends GuiOBJ
+public class GuiText extends GuiOBJ implements IFocusable
 {
 	public boolean background = true;
 
@@ -90,5 +91,23 @@ public class GuiText extends GuiOBJ
 			this.gui.drawString(this.text, k + this.x + 3, l + this.y + 3);
 			GL11.glPopMatrix();
 		}
+	}
+
+	@Override
+	public void input()
+	{
+		
+	}
+
+	@Override
+	public boolean canFocus()
+	{
+		return false;
+	}
+	
+	@Override
+	public AABB2 getFocusAABB(int k, int l)
+	{
+		return null;
 	}
 }

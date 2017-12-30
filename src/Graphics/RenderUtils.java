@@ -2,13 +2,13 @@ package Graphics;
 
 import org.lwjgl.opengl.GL11;
 
-import Utilities.AABB;
+import Math.Vec.Vec2;
+import Utilities.AABB2;
 import Utilities.Tessellator;
-import Utilities.Vec2;
 
 public class RenderUtils
 {
-	public static void renderAABB(AABB aabb)
+	public static void renderAABB(AABB2 aabb)
 	{
 		Tessellator t = GUI.t;
 

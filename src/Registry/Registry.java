@@ -1,7 +1,7 @@
 package Registry;
 
 import Game.Item;
-import Game.Entities.Entity;
+import Game.Entities.API.Entity;
 import Graphics.Render.Render;
 
 public class Registry
@@ -12,6 +12,7 @@ public class Registry
 		Binds.register();
 		EntityRegistry.register();
 		RenderRegistry.register();
+		BorderRenderRegistry.register();
 
 		EventHandlers.register();
 	}

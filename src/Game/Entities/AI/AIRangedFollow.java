@@ -2,9 +2,9 @@ package Game.Entities.AI;
 
 import java.util.List;
 
-import Game.Entities.EntityLiving;
+import Game.Entities.API.EntityLiving;
 import Graphics.GUI;
-import Utilities.Vec2;
+import Math.Vec.Vec2;
 
 public class AIRangedFollow extends AI
 {
@@ -31,7 +31,7 @@ public class AIRangedFollow extends AI
 		if (this.currTarget == null)
 		{
 			Vec2 ps = e.pos;
-			List<EntityLiving> l = GUI.croom.getEntitiesWithinSquare(this.target, ps.extendBoth(this.sRange));
+			List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(this.target, ps.extendBoth(this.sRange));
 			double min = 10000;
 			EntityLiving t = null;
 			for (int i = 0; i < l.size(); i++)
@@ -51,7 +51,7 @@ public class AIRangedFollow extends AI
 			}
 			else
 			{
-				e.setVelocity(e.velocity.modif(0.95));
+				e.setVelocity(e.vel.mult(0.95));
 			}
 		}
 		else
@@ -66,11 +66,11 @@ public class AIRangedFollow extends AI
 				if (ev.length() > this.mRange)
 				{
 					ev.normalize();
-					e.velocity = e.velocity.add(ev.modif(this.velocity / 10d, e.ableToFly ? this.velocity / 10d : 0));
+					e.vel = e.vel.add(ev.mult(this.velocity / 10d, e.ableToFly ? this.velocity / 10d : 0));
 				}
 				else
 				{
-					e.setVelocity(e.velocity.modif(0.95));
+					e.setVelocity(e.vel.mult(0.95));
 				}
 			}
 		}

@@ -2,14 +2,13 @@ package Graphics.Render;
 
 import org.lwjgl.opengl.GL11;
 
-import Game.Entities.Entity;
-import Game.Entities.EntityItem;
+import Game.Border;
+import Game.Entities.API.Entity;
 import Graphics.GUI;
-import Graphics.Main;
-import Graphics.Sprite;
+import Math.Vec.Vec2;
+import Utilities.AABB2;
+import Utilities.Graph;
 import Utilities.Tessellator;
-import Utilities.Utils;
-import Utilities.Vec2;
 
 public class BasicRender extends Render
 {
@@ -21,35 +20,35 @@ public class BasicRender extends Render
 
 		if (obj.getSprite() != null)
 		{
+			GL11.glPushMatrix();
+
+			GL11.glTranslated(obj.pos.x, obj.pos.y, 0);
+
 			obj.getSprite().getTexture().bind();
-			t.start(GL11.GL_QUADS);
+			AABB2 bb = new Vec2().extendBoth(obj.width / 2, obj.height / 2);
 
-			t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y + obj.height, 0, 0);
-			t.addVertexWithUV(obj.pos.x + obj.width / 2, obj.pos.y + obj.height, 1, 0);
-			t.addVertexWithUV(obj.pos.x + obj.width / 2, obj.pos.y, 1, 1);
-			t.addVertexWithUV(obj.pos.x - obj.width / 2, obj.pos.y, 0, 1);
+			Graph.renderSqr(bb);
+			GL11.glPopMatrix();
+		}
 
-			t.draw();
+	}
 
-			if (!(obj instanceof EntityItem))
-			{
-				double d = obj.pos.sub(Vec2.getCenteredPos(Main.p)).length();
-				if (d <= 50)
-				{
-					int as = 32;
+	@Override
+	public void render(Border bord)
+	{
+		Tessellator t = GUI.t;
 
-					Sprite.arrinter.getTexture().bind();
-					t.start(GL11.GL_QUADS);
+		if (bord.sprite != null)
+		{
+			GL11.glPushMatrix();
 
-					t.addVertexWithUV(obj.pos.x - as / 2, obj.pos.y + obj.height + as, 0, 0);
-					t.addVertexWithUV(obj.pos.x + as / 2, obj.pos.y + obj.height + as, 1, 0);
-					t.addVertexWithUV(obj.pos.x + as / 2, obj.pos.y + obj.height, 1, 1);
-					t.addVertexWithUV(obj.pos.x - as / 2, obj.pos.y + obj.height, 0, 1);
+			GL11.glTranslated(bord.pos.x, bord.pos.y, 0);
 
-					t.draw();
-				}
+			bord.sprite.getTexture().bind();
+			AABB2 bb = new Vec2().extendBoth(bord.width / 2, bord.height / 2);
 
-			}
+			Graph.renderSqr(bb);
+			GL11.glPopMatrix();
 		}
 
 	}

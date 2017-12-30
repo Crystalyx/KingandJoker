@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="libs/vecmath-1.3.1.jar"/>
 	<classpathentry kind="lib" path="libs/natives-windows.jar"/>
 	<classpathentry kind="lib" path="libs/slick-util.jar" sourcepath="libs/slick-util-src.zip"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MiscUtils"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

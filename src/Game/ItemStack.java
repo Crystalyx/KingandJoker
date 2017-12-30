@@ -34,10 +34,10 @@ public class ItemStack
 		nbt = tg;
 		return this;
 	}
-	
+
 	public boolean equals(ItemStack is)
 	{
-		return this.item == is.item && this.meta == is.meta && this.size == is.size && ((this.nbt == null && is.nbt == null) || this.nbt.equals(is.nbt));
+		return is == null ? false : this.item == is.item && this.meta == is.meta && this.size == is.size && ((this.nbt == null && is.nbt == null) || this.nbt.equals(is.nbt));
 	}
 
 	public void write(Tag equip, String base)

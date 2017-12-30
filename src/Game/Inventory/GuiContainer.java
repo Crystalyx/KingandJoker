@@ -6,16 +6,21 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import API.IFocusable;
+import Core.KIJCore;
 import Game.ItemStack;
-import Game.Entities.EntityItem;
+import Game.Entities.API.EntityItem;
+import Game.Inventory.Base.GuiOBJ;
 import Graphics.FontRenderer;
 import Graphics.GUI;
-import Graphics.Main;
-import Graphics.Sprite;
+import Graphics.Icon;
+import Math.Vec.Vec2;
 import Registry.Binds;
+import Utilities.Color;
+import Utilities.Graph;
+import Utilities.Logger;
 import Utilities.Tessellator;
 import Utilities.Utils;
-import Utilities.Vec2;
 
 public class GuiContainer extends Gui
 {
@@ -33,7 +38,8 @@ public class GuiContainer extends Gui
 	@Override
 	public void drawGui(int k, int l)
 	{
-		this.drawBack(k, l);
+		this.drawBack(k + this.dx, l + this.dy);
+		this.drawSlots(k + this.dx, l + this.dy);
 	}
 
 	public void drawBack(int k, int l)
@@ -82,7 +88,7 @@ public class GuiContainer extends Gui
 					GL11.glColor4d(1, 1, 1, 0.5);
 
 					GUI.inslot = true;
-					Sprite.sqr.getTexture().bind();
+					Icon.sqr.getTexture().bind();
 					t.start(GL11.GL_QUADS);
 
 					t.addVertexWithUV(slot.x, slot.y + sside, 0, 0);
@@ -107,7 +113,7 @@ public class GuiContainer extends Gui
 					{
 						List<String> ttl = new ArrayList<String>();
 						ttl.add(slot.getStack().item.name);
-						slot.getStack().item.addInformation(slot.getStack(), Main.p, ttl);
+						slot.getStack().item.addInformation(slot.getStack(), KIJCore.p, ttl);
 
 						int count = 0;
 						for (String s : ttl)
@@ -117,41 +123,19 @@ public class GuiContainer extends Gui
 								count = s.length();
 							}
 						}
-						int twidth = 8 * (count + 2);
-						int theight = 6 * (ttl.size() + 2);
+						int twidth = 7 * (count + 2);
+						int theight = 8 * (ttl.size() + 2);
 
-						// -+
-						t.drawTexturedModalRect(mx + 2, my - 16, 0, 0, 8, 8, Sprite.getSprite("tooltip"));
-						// ++
-						t.drawTexturedModalRect(mx - 6 + twidth, my - 16, 24, 0, 8, 8, Sprite.getSprite("tooltip"));
-						// --
-						t.drawTexturedModalRect(mx + 2, my - 16 - theight, 0, 24, 8, 8, Sprite.getSprite("tooltip"));
-						// +-
-						t.drawTexturedModalRect(mx - 6 + twidth, my - 16 - theight, 24, 24, 8, 8, Sprite.getSprite("tooltip"));
+						GuiOBJ.vanillaTexture.bind();
+						GL11.glPushMatrix();
+						GL11.glTranslated(mx, my - 4, 0);
 
-						// horiz
-						for (int i = 0; i < count; i++)
-						{
-							t.drawTexturedModalRect(mx + 10 + i * 8, my - 16, 8, 0, 8, 8, Sprite.getSprite("tooltip"));
-							t.drawTexturedModalRect(mx + 10 + i * 8, my - 16 - theight, 8, 24, 8, 8, Sprite.getSprite("tooltip"));
-						}
-						// vert
-						for (int i = 0; i < ttl.size() + 1; i++)
-						{
-							t.drawTexturedModalRect(mx + 2, my - 22 - 6 * i, 0, 8, 8, 6, Sprite.getSprite("tooltip"));
-							t.drawTexturedModalRect(mx - 6 + twidth, my - 22 - 6 * i, 24, 8, 8, 6, Sprite.getSprite("tooltip"));
-						}
+						Graph.drawSizedSqr(this, 256, 256, 32, 32, twidth, theight, 224, 0, 8, 8);
 
-						for (int i = 0; i < count; i++)
-						{
-							for (int j = 0; j < ttl.size() + 1; j++)
-							{
-								t.drawTexturedModalRect(mx + 10 + i * 8, my - 22 - j * 6, 8, 8, 8, 6, Sprite.getSprite("tooltip"));
-							}
-						}
+						GL11.glPopMatrix();
 
 						GL11.glPushMatrix();
-						GL11.glTranslated(mx + 10, my - 16, 0);
+						GL11.glTranslated(mx + 10, my - 4, 0);
 						GL11.glRotated(180, 1, 0, 0);
 						FontRenderer fr = new FontRenderer();
 						int i = 0;
@@ -171,10 +155,10 @@ public class GuiContainer extends Gui
 			// TODO
 			if (GUI.guiis != null)
 			{
-				EntityItem ei = new EntityItem(Main.p.pos, GUI.guiis);
-				ei.velocity = new Vec2(Utils.getIntInRange(-4, 4), Utils.getIntInRange(1, 4));
+				EntityItem ei = new EntityItem(KIJCore.p.pos, GUI.guiis);
+				ei.vel = new Vec2(Utils.getIntInRange(-4, 4), Utils.getIntInRange(1, 4));
 				ei.setTimer(30);
-				GUI.croom.addObj(ei);
+				GUI.room.addObj(ei);
 				GUI.guiis = null;
 			}
 		}
