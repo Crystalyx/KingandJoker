@@ -2,14 +2,12 @@ package Game.Entities.Throwable;
 
 import java.util.List;
 
+import Core.GUI;
 import Game.Action;
 import Game.Entities.API.Damage;
 import Game.Entities.API.Entity;
 import Game.Entities.API.EntityLiving;
 import Game.Entities.API.EntityThrowable;
-import Game.Entities.Modifiers.Modifier;
-import Game.Entities.Modifiers.SharedModifiers;
-import Graphics.GUI;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Utilities.AABB2;

@@ -2,9 +2,9 @@ package Game.Entities.AI;
 
 import java.util.List;
 
+import Core.GUI;
 import Game.Entities.API.EntityLiving;
 import Game.Entities.API.IRangedAttacker;
-import Graphics.GUI;
 import Math.Vec.Vec2;
 
 public class AIRangedAttack extends AI

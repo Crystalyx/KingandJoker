@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Entities.API.Entity;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Utilities.AABB2;
@@ -29,6 +30,11 @@ public class Border
 	public int getRenderType()
 	{
 		return 0;
+	}
+	
+	public boolean checkIntersection(Entity o)
+	{
+		return o.getBB().intersects(this.getBB()) || this.getBB().intersects(o.getBB());
 	}
 
 }

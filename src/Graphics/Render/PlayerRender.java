@@ -3,12 +3,12 @@ package Graphics.Render;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import Core.GUI;
 import Core.KIJCore;
 import Game.ItemStack;
 import Game.Entities.API.Entity;
 import Game.Items.Laser;
 import Game.Items.API.ItemGun;
-import Graphics.GUI;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Registry.Binds;

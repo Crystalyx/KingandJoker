@@ -2,14 +2,13 @@ package Game.Items;
 
 import org.lwjgl.input.Mouse;
 
+import Core.GUI;
 import Game.Entities.Player;
 import Game.Entities.API.Damage;
 import Game.Entities.API.EntityLiving;
 import Game.Entities.Throwable.Lightingball;
 import Game.Items.API.ItemGun;
-import Graphics.GUI;
 import Graphics.Icon;
-import Utilities.Logger;
 import Utilities.Utils;
 
 public class LightningGun extends ItemGun

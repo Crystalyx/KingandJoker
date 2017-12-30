@@ -6,14 +6,13 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import Core.GUI;
 import Core.KIJCore;
 import Game.Entities.Player;
 import Game.Entities.API.Entity;
 import Game.Entities.API.EntityLiving;
 import Game.Entities.API.EntityThrowable;
-import Graphics.GUI;
 import Graphics.Icon;
-import Graphics.RenderUtils;
 import Math.Vec.Vec2;
 import Registry.Binds;
 import Registry.BorderRenderRegistry;
@@ -23,7 +22,6 @@ import Utilities.AABB2;
 import Utilities.Graph;
 import Utilities.Logger;
 import Utilities.Tessellator;
-import Utilities.Utils;
 
 public class Room
 {
@@ -100,10 +98,6 @@ public class Room
 		t.addVertexWithUV(0, 0, 0, 0);
 		t.draw();
 
-		int s = 32;
-		int n = w / s + 1;
-		int gh = 58;
-
 		for (Entity obj : objs)
 		{
 			RenderRegistry.getRender(obj.getRenderType()).render(obj);
@@ -118,7 +112,7 @@ public class Room
 			BorderRenderRegistry.getRender(bord.getRenderType()).render(bord);
 		}
 
-		Icon.getIcon("toolbox").bind();
+		Icon.getIcon("UI/toolbox").bind();
 		t.start(GL11.GL_QUADS);
 		t.addVertexWithUV(0, h, 0, 1);
 		t.addVertexWithUV(w, h, 1, 1);
@@ -150,11 +144,11 @@ public class Room
 		AABB2 energybb = new Vec2(60, h + 70 - barHeight).extend(barWidth, barHeight);
 		AABB2 cenergybb = new Vec2(60 + border, h + 70 - barHeight).extend(energy - border * 2, barHeight);
 
-		Icon.getIcon("healthbar").bind();
+		Icon.getIcon("UI/healthbar").bind();
 		Graph.renderSqrWithUV(healthbb, uvhollow);
 		Graph.renderSqrWithUV(chealthbb, uvfull);
 
-		Icon.getIcon("energybar").bind();
+		Icon.getIcon("UI/energybar").bind();
 		Graph.renderSqrWithUV(energybb, uvhollow);
 		Graph.renderSqrWithUV(cenergybb, uvfull);
 	}
@@ -335,18 +329,18 @@ public class Room
 		Vec2 vaabb = obj.pos.sub(new Vec2(obj.width / 2, obj.height / 2));
 		AABB2 ab = vaabb.extend(new Vec2(obj.width, obj.height));
 
-		RenderUtils.renderAABB(ab);
+		Graph.renderAABB(ab);
 
 		Vec2 vp = KIJCore.p.pos.add(new Vec2(0, 0));
 
 		AABB2 range = vp.extendBoth(new Vec2(KIJCore.p.width, KIJCore.p.height));
-		RenderUtils.renderAABB(range);
+		Graph.renderAABB(range);
 
 		GL11.glColor3d(0, 1d, 0);
 
 		if (obj instanceof EntityThrowable)
 		{
-			RenderUtils.renderCircle(((EntityThrowable) obj).tgp, 10);
+			Graph.renderCircle(((EntityThrowable) obj).tgp, 10);
 		}
 
 		GL11.glColor3d(1, 1, 1);

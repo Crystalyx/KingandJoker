@@ -2,7 +2,6 @@ package Game.Entities;
 
 import Game.Entities.AI.AIAttackOnCollide;
 import Game.Entities.AI.AICentryFollow;
-import Game.Entities.API.Damage;
 import Game.Entities.API.EntityLiving;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.SharedModifiers;

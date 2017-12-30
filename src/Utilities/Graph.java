@@ -2,8 +2,8 @@ package Utilities;
 
 import org.lwjgl.opengl.GL11;
 
-import Game.Inventory.Gui;
-import Graphics.GUI;
+import API.Focusable;
+import Core.GUI;
 import Graphics.Icon;
 import Math.Matrix.Matrix2;
 import Math.Vec.Vec2;
@@ -116,6 +116,8 @@ public class Graph
 			t.addVertexWithUV(Math.cos((i + 1) * da) * (r + 2), Math.sin((i + 1) * da) * (r + 2), 1, 1);
 			t.addVertexWithUV(Math.cos(i * da) * (r + 2), Math.sin((i + 1) * da) * (r + 2), 0, 1);
 
+			
+			
 			t.addVertexWithUV(Math.cos(i * da) * r, Math.sin(i * da) * r, 0, 1);
 			t.addVertexWithUV(Math.cos((i + 1) * da) * r, Math.sin((i + 1) * da) * r, 1, 1);
 			t.addVertexWithUV(Math.cos((i + 1) * da) * (r + 2), Math.sin((i + 1) * da) * (r + 2), 1, 0);
@@ -215,7 +217,7 @@ public class Graph
 		GL11.glPopMatrix();
 	}
 
-	public static void drawSizedSqr(Gui gui, int tsizex, int tsizey, int sizeu, int sizev, int sizex, int sizey, int startu, int startv, int borderx, int bordery)
+	public static void drawSizedSqr(Focusable gui, int tsizex, int tsizey, int sizeu, int sizev, int sizex, int sizey, int startu, int startv, int borderx, int bordery)
 	{
 		GL11.glPushMatrix();
 

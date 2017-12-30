@@ -2,6 +2,7 @@ package Game.Entities.Throwable;
 
 import java.util.List;
 
+import Core.GUI;
 import Game.Action;
 import Game.Entities.Sparkler;
 import Game.Entities.API.Damage;
@@ -10,7 +11,6 @@ import Game.Entities.API.EntityLiving;
 import Game.Entities.API.EntityThrowable;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.SharedModifiers;
-import Graphics.GUI;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Utilities.AABB2;
@@ -51,7 +51,6 @@ public class Sparkle extends EntityThrowable
 		super.update(time);
 		AABB2 v = this.pos.extendBoth(new Vec2(this.width / 2, this.height / 2));
 		List<EntityLiving> l = GUI.room.getLivingEntitiesWithinSquareExcluding(Sparkler.class, v);
-		l.remove(this);
 		l.remove(this.sender);
 		EntityLiving nrst = null;
 		double min = 10000;

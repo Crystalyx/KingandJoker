@@ -2,8 +2,8 @@ package Graphics.Render;
 
 import org.lwjgl.opengl.GL11;
 
+import Core.GUI;
 import Game.Entities.API.Entity;
-import Graphics.GUI;
 import Utilities.Tessellator;
 
 public class RotativeRender extends Render

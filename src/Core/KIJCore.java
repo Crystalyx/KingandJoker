@@ -5,9 +5,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import Game.Entities.Player;
-import Game.Items.API.ItemBow;
-import Graphics.GUI;
-import Math.Complex.Quaternion;
 import Math.Vec.Vec2;
 import Registry.Binds;
 import Registry.Registry;
@@ -78,12 +75,11 @@ public class KIJCore
 				input();
 			tickFox = false;
 
-			if (GUI.fox != null && Utils.isInLimit(new Vec2(mx, my), GUI.fox.getMoveAABB(GUI.K, GUI.L)))
+			if (GUI.focus != null && Utils.isInLimit(new Vec2(mx, my), GUI.focus.getMoveAABB(GUI.K, GUI.L)))
 			{
 				if (!tickFox)
 				{
 					tickFox = true;
-					GUI.focus = GUI.fox;
 				}
 			}
 			if (!tickFox)

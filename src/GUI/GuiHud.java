@@ -1,12 +1,12 @@
 package GUI;
 
+import API.Focusable;
+import Core.GUI;
 import Core.KIJCore;
-import Game.Inventory.Gui;
-import Graphics.GUI;
 import UCS.GuiEvent;
 import UCS.GuiEvent.RenderType;
 
-public class GuiHud extends Gui
+public class GuiHud extends Focusable
 {
 
 	public GuiHud()

@@ -3,10 +3,9 @@ package Game.Entities.API;
 import java.util.ArrayList;
 import java.util.List;
 
-import Game.Action;
+import Core.GUI;
 import Game.Entities.AI.AI;
 import Game.Entities.Modifiers.SharedModifiers;
-import Graphics.GUI;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 
@@ -78,8 +77,6 @@ public class EntityLiving extends Entity
 		this.life -= cdam;
 		return true;
 	}
-
-	public Action near = new Action();
 
 	@Override
 	public void update(long time)

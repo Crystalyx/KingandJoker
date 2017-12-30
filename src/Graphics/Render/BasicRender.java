@@ -4,11 +4,9 @@ import org.lwjgl.opengl.GL11;
 
 import Game.Border;
 import Game.Entities.API.Entity;
-import Graphics.GUI;
 import Math.Vec.Vec2;
 import Utilities.AABB2;
 import Utilities.Graph;
-import Utilities.Tessellator;
 
 public class BasicRender extends Render
 {
@@ -16,8 +14,6 @@ public class BasicRender extends Render
 	@Override
 	public void render(Entity obj)
 	{
-		Tessellator t = GUI.t;
-
 		if (obj.getSprite() != null)
 		{
 			GL11.glPushMatrix();
@@ -36,8 +32,6 @@ public class BasicRender extends Render
 	@Override
 	public void render(Border bord)
 	{
-		Tessellator t = GUI.t;
-
 		if (bord.sprite != null)
 		{
 			GL11.glPushMatrix();

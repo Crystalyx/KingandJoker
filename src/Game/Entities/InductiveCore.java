@@ -1,15 +1,14 @@
 package Game.Entities;
 
+import Core.GUI;
 import Game.Entities.AI.AIRangedAttack;
 import Game.Entities.AI.AIRangedFollow;
 import Game.Entities.API.Damage;
-import Game.Entities.API.Entity;
 import Game.Entities.API.EntityLiving;
 import Game.Entities.API.IRangedAttacker;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.SharedModifiers;
 import Game.Entities.Throwable.InducedMithrillium;
-import Graphics.GUI;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Utilities.Utils;

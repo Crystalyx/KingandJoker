@@ -35,9 +35,14 @@ public class ItemStack
 		return this;
 	}
 
-	public boolean equals(ItemStack is)
+	public boolean equals(Object o)
 	{
-		return is == null ? false : this.item == is.item && this.meta == is.meta && this.size == is.size && ((this.nbt == null && is.nbt == null) || this.nbt.equals(is.nbt));
+		if (o instanceof ItemStack)
+		{
+			ItemStack is = (ItemStack) o;
+			return is == null ? false : this.item == is.item && this.meta == is.meta && this.size == is.size && ((this.nbt == null && is.nbt == null) || (this.nbt != null && is.nbt != null && this.nbt.equals(is.nbt)));
+		}
+		return false;
 	}
 
 	public void write(Tag equip, String base)

@@ -14,22 +14,9 @@ import Utilities.Logger;
 
 public class Icon
 {
-	public static final Icon head = new Icon("head");
-	public static final Icon sky = new Icon("sky");
-	public static final Icon brick = new Icon("brick");
-	public static final Icon cluster = new Icon("cluster");
-	public static final Icon player = new Icon("player");
-	public static final Icon manequen = new Icon("manequen");
-	public static final Icon arrinter = new Icon("arrowinterr");
-	public static final Icon inv = new Icon("inv");
-	public static final Icon hot = new Icon("hotbar");
-	public static final Icon sqr = new Icon("sqr");
-	public static final Icon plate = new Icon("plate");
-	public static final Icon alch = new Icon("alchstone");
-	public static final Icon frame = new Icon("frame");
-	public static final Icon equ = new Icon("equ");
 	public static final Icon nil = new Icon("null");
-	public static final Icon trace = new Icon("trace");
+	public static final Icon manequen = new Icon("manequen");
+	public static final Icon sqr = new Icon("sqr");
 
 	public static final HashMap<String, Icon> icons = new HashMap<String, Icon>();
 	private Texture texture;

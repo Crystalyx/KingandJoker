@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import Core.GUI;
 import Game.Action;
 import Game.ItemStack;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.ModifierList;
-import Graphics.GUI;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Utilities.AABB2;
@@ -27,7 +27,7 @@ public class Entity
 	public int lifeTime = 0;
 	public double rotation = 0;
 	public ModifierList modifiers = new ModifierList();
-	
+
 	public boolean celestial = false;
 
 	public void applyModifier(Modifier m)
@@ -39,7 +39,7 @@ public class Entity
 	{
 		for (Modifier mr : this.modifiers.list.get(m.base.name))
 		{
-			if (mr.uuid == m.uuid)
+			if (mr.uuid.equals(m.uuid))
 			{
 				this.modifiers.list.get(m.base.name).remove(mr);
 			}

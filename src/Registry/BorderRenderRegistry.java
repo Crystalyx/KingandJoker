@@ -3,10 +3,7 @@ package Registry;
 import java.util.Hashtable;
 
 import Graphics.Render.BasicRender;
-import Graphics.Render.PlayerRender;
 import Graphics.Render.Render;
-import Graphics.Render.RotativeRender;
-import Graphics.Render.SparklerRender;
 import Registry.Registry.RegistrationException;
 
 public class BorderRenderRegistry
