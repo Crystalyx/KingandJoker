@@ -2,22 +2,25 @@ package Game.Entities;
 
 import java.util.List;
 
+import Core.GUI;
 import Game.ItemStack;
 import Game.Entities.AI.AIRangedAttack;
 import Game.Entities.AI.AIRangedFollow;
+import Game.Entities.API.Damage;
+import Game.Entities.API.EntityAttribute;
+import Game.Entities.API.EntityLiving;
+import Game.Entities.API.IRangedAttacker;
 import Game.Entities.Modifiers.Modifier;
 import Game.Entities.Modifiers.SharedModifiers;
-import Graphics.GUI;
-import Graphics.Sprite;
-import Registry.GameRegistry;
-import Utilities.Utils;
-import Utilities.Vec2;
+import Game.Entities.Throwable.Sparkle;
+import Graphics.Icon;
+import Math.Vec.Vec2;
 
 public class Sparkler extends EntityLiving implements IRangedAttacker
 {
 	public Sparkler(Vec2 pos)
 	{
-		super(pos, 64, 64, Sprite.getSprite("mobs/sparkler"));
+		super(pos, 64, 64, Icon.getIcon("mobs/sparkler"));
 		this.maxVelocity = new Vec2(8, 6);
 		this.ableToFly = true;
 		this.setAttribute(EntityAttribute.Energy);
@@ -31,7 +34,7 @@ public class Sparkler extends EntityLiving implements IRangedAttacker
 	public List<ItemStack> getDrops()
 	{
 		List<ItemStack> l = super.getDrops();
-		l.add(new ItemStack(GameRegistry.getItem(Utils.r.nextInt(GameRegistry.items.size()))));
+//		l.add(new ItemStack(GameRegistry.getItem(Utils.r.nextInt(GameRegistry.items.size()))));
 		return l;
 	}
 
@@ -44,12 +47,12 @@ public class Sparkler extends EntityLiving implements IRangedAttacker
 	@Override
 	public boolean performRangedAttack(EntityLiving target)
 	{
-		Vec2 ev = Vec2.getCenteredPos(target).sub(Vec2.getCenteredPos(this));
-		Sparkle b = new Sparkle(this, new Damage().setEntityDamage(this, 20), Vec2.getCenteredPos(this));
+		Vec2 ev = target.pos.sub(this.pos);
+		Sparkle b = new Sparkle(this, new Damage().setEntityDamage(this, 20), this.pos);
 		b.tgp = target.pos;
 		ev.normalize();
-		b.setVelocity(ev.modif(8));
-		GUI.croom.addObj(b);
+		b.setVelocity(ev.mult(8));
+		GUI.room.addObj(b);
 		return true;
 	}
 

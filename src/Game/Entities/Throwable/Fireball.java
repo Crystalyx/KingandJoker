@@ -36,7 +36,7 @@ public class Fireball extends EntityThrowable
 	@Override
 	public int getRenderType()
 	{
-		return 3;
+		return 0;
 	}
 
 	@Override

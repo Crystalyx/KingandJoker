@@ -17,6 +17,7 @@ public class Lightingball extends EntityThrowable
 	public Lightingball(Entity sender, Damage damage, Vec2 pos)
 	{
 		super(sender, damage, pos, 24, 24, Icon.getIcon("mobs/lightningball"));
+		this.neededHeading = false;
 		this.near = new Action()
 		{
 			@Override
@@ -43,6 +44,7 @@ public class Lightingball extends EntityThrowable
 	public void update(long time)
 	{
 		super.update(time);
+		this.rotation += 23;
 		AABB2 v = this.pos.extendBoth(new Vec2(this.width / 2, this.height / 2));
 		List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(EntityLiving.class, v);
 		l.remove(this);
