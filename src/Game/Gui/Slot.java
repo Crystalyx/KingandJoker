@@ -6,12 +6,12 @@ public class Slot
 {
 	public int id;
 
-	public int x;
-	public int y;
+	public double x;
+	public double y;
 	public IInventory inv;
 	public Container cont;
 
-	public Slot(int id, int x, int y, IInventory inv)
+	public Slot(int id, double x, double y, IInventory inv)
 	{
 		this.id = id;
 		this.x = x;

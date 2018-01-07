@@ -116,8 +116,6 @@ public class Graph
 			t.addVertexWithUV(Math.cos((i + 1) * da) * (r + 2), Math.sin((i + 1) * da) * (r + 2), 1, 1);
 			t.addVertexWithUV(Math.cos(i * da) * (r + 2), Math.sin((i + 1) * da) * (r + 2), 0, 1);
 
-			
-			
 			t.addVertexWithUV(Math.cos(i * da) * r, Math.sin(i * da) * r, 0, 1);
 			t.addVertexWithUV(Math.cos((i + 1) * da) * r, Math.sin((i + 1) * da) * r, 1, 1);
 			t.addVertexWithUV(Math.cos((i + 1) * da) * (r + 2), Math.sin((i + 1) * da) * (r + 2), 1, 0);
@@ -217,14 +215,13 @@ public class Graph
 		GL11.glPopMatrix();
 	}
 
-	public static void drawSizedSqr(Focusable gui, int tsizex, int tsizey, int sizeu, int sizev, int sizex, int sizey, int startu, int startv, int borderx, int bordery)
+	public static void drawSizedSqr(Focusable gui, double tsizex, double tsizey, double sizeu, double sizev, double sizex, double sizey, double startu, double startv, double borderx, double bordery)
 	{
 		GL11.glPushMatrix();
 
-		int dpx = borderx;
-
-		int nu = Math.floorDiv(sizex - borderx * 2, dpx) + Utils.boolToNum(Math.floorMod(sizex - borderx * 2, dpx) > 0, 1, 0);
-		int nv = Math.floorDiv(sizey - bordery * 2, dpx) + Utils.boolToNum(Math.floorMod(sizey - bordery * 2, dpx) > 0, 1, 0);
+		double dpx = borderx;
+		double nu = Utils.floorDiv(sizex - borderx * 2, dpx) + Utils.boolToNum(Utils.floorMod(sizex - borderx * 2, dpx) > 0, 1, 0);
+		double nv = Utils.floorDiv(sizey - bordery * 2, dpx) + Utils.boolToNum(Utils.floorMod(sizey - bordery * 2, dpx) > 0, 1, 0);
 
 		for (int i = 0; i < nv; i++)
 		{

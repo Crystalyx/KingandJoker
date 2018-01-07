@@ -25,16 +25,10 @@ public class GuiBase extends GuiContainer
 		});
 	}
 
-	public void drawString(String s, int i, int j)
+	public void drawString(String s, double i, double j, int font)
 	{
 		FontRenderer fr = new FontRenderer();
-		fr.drawString(s, i, j);
-	}
-
-	@Override
-	public void drawGui(int k, int l)
-	{
-		super.drawGui(k+dx, l+dy);
+		fr.drawString(s, i, j, font);
 	}
 
 	@Override
@@ -46,6 +40,15 @@ public class GuiBase extends GuiContainer
 			obj.setGui(this);
 
 			obj.render(k, l);
+			GL11.glPopMatrix();
+		}
+
+		for (GuiButton b : this.base.buttons)
+		{
+			GL11.glPushMatrix();
+			b.setGui(this);
+
+			b.render(k, l);
 			GL11.glPopMatrix();
 		}
 	}
@@ -69,12 +72,6 @@ public class GuiBase extends GuiContainer
 	}
 
 	@Override
-	public AABB2 getFocusAABB(int k, int l)
-	{
-		return super.getMoveAABB(k, l);
-	}
-
-	@Override
 	public void input()
 	{
 		this.moveBy(KIJCore.mvx, KIJCore.mvy);
@@ -83,12 +80,13 @@ public class GuiBase extends GuiContainer
 	@Override
 	public AABB2 getMoveAABB(int k, int l)
 	{
-		if (this.base.objs.get(0) instanceof GuiBackground)
-		{
-			GuiBackground gbg = (GuiBackground) this.base.objs.get(0);
-			return new Vec2(k + (gbg.x + 2) * 2 * 1.38, l + (gbg.y - 16) * 2 * 1.38).extend(this.width * 2 * 1.38, this.borderHeight * 2 * 1.38).move(new Vec2(dx, dy));
-		}
-		return null;
+		return new Vec2(k + dx - (this.width - 30) * 2.76 / 2, l + dy - this.borderHeight * 4 + 16 + (this.height + this.borderHeight * 2) * 2.76 / 2).extend((this.width + 15) * 2.76, this.borderHeight * 2.76);
+	}
+
+	@Override
+	public AABB2 getFocusAABB(int k, int l)
+	{
+		return new Vec2(k + dx - (this.width - 30) * 2.76 / 2, l + dy - this.borderHeight * 4 + 16 + (this.height + this.borderHeight * 4) * 2.76 / 2).extend((this.width + 15) * 2.76, 24 - this.borderHeight - this.height * 2.76);
 	}
 
 	@Override
@@ -96,6 +94,12 @@ public class GuiBase extends GuiContainer
 	{
 		this.dx += vx;
 		this.dy += vy;
+	}
+
+	@Override
+	public void onFocusing()
+	{
+		this.base.buttons.stream().filter(s -> s instanceof GuiSwitch).forEach(k -> ((GuiSwitch) k).state = ((GuiSwitch) k).getState());
 	}
 
 }

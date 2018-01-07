@@ -27,7 +27,7 @@ public class Room
 {
 	public List<Entity> objs = new ArrayList<Entity>();
 	public List<Border> bords = new ArrayList<Border>();
-	public Border[][] gunbords = new Border[GUI.SCREEN_WIDTH / 50][GUI.SCREEN_HEIGHT / 50];
+	public Border[][] gunbords = new Border[1 + GUI.SCREEN_WIDTH / 50][1 + GUI.SCREEN_HEIGHT / 50];
 
 	public int width = GUI.SCREEN_WIDTH;
 	public int height = GUI.SCREEN_HEIGHT - 150;
@@ -70,7 +70,7 @@ public class Room
 		}
 		else
 		{
-			Border b = new Border(new Vec2(Math.floorDiv(x * 50 + 25, 50) * 50, Math.floorDiv(y * 50 + 25, 50) * 50), 50, 50, Icon.getIcon("metal"));
+			Border b = new Border(new Vec2(Math.floorDiv(x * 50 + 25, 50) * 50, Math.floorDiv(y * 50 + 25, 50) * 50), 50, 50, Icon.getIcon("border/metal"));
 			GUI.room.addBorder(b);
 			gunbords[x][y] = b;
 		}

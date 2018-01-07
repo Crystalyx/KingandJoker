@@ -44,7 +44,7 @@ public class Tessellator
 		}
 	}
 
-	public void drawTexturedModalRect(int x, int y, int u, int v, int w, int h, Icon icon)
+	public void drawTexturedModalRect(double x, double y, double u, double v, double w, double h, Icon icon)
 	{
 		icon.getTexture().bind();
 		this.start(GL11.GL_QUADS);

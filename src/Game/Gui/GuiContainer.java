@@ -16,6 +16,7 @@ import Graphics.FontRenderer;
 import Graphics.Icon;
 import Math.Vec.Vec2;
 import Registry.Binds;
+import Utilities.AABB2;
 import Utilities.Graph;
 import Utilities.Tessellator;
 import Utilities.Utils;
@@ -23,14 +24,21 @@ import Utilities.Utils;
 public class GuiContainer extends Focusable
 {
 	public Container c;
-	public static int sside = 20;
+	public static int sside = 12;
 	public double x = 0;
 	public double y = 0;
 
-	public GuiContainer(int width, int height, Container c)
+	public GuiContainer(double width, double height, Container c)
 	{
 		super(width, height);
 		this.c = c;
+		this.hasContainer = true;
+	}
+
+	@Override
+	public Container getContainer()
+	{
+		return this.c;
 	}
 
 	@Override
@@ -53,7 +61,7 @@ public class GuiContainer extends Focusable
 		GL11.glTranslated(k, l - 100, 0);
 		GL11.glScaled(2, 2, 1);
 		GL11.glScaled(1.38, 1.38, 1);
-		GL11.glTranslated(0, (20 - GuiContainer.sside), 0);
+		GL11.glTranslated(0, (0 - GuiContainer.sside), 0);
 
 		int mx = (int) Math.round((Mouse.getX() - k) / (2 * 1.38));
 		int my = (int) (Math.round((Mouse.getY() + 100 - l) / (2 * 1.38)));
@@ -64,7 +72,7 @@ public class GuiContainer extends Focusable
 			{
 				slot.getStack().item.icon.getTexture().bind();
 
-				double d = 1 / (2 * 1.38);
+				double d = 0;// 1 / (2 * 1.38);
 
 				t.start(GL11.GL_QUADS);
 
@@ -81,7 +89,7 @@ public class GuiContainer extends Focusable
 		{
 			if (Utils.isInLimit(mx, slot.x, slot.x + sside))
 			{
-				if (Utils.isInLimit(my, slot.y, slot.y + sside))
+				if (Utils.isInLimit(my, slot.y - sside, slot.y))
 				{
 					GL11.glColor4d(1, 1, 1, 0.5);
 
@@ -166,14 +174,8 @@ public class GuiContainer extends Focusable
 		{
 			GUI.guiis.item.icon.getTexture().bind();
 
-			t.start(GL11.GL_QUADS);
-
-			t.addVertexWithUV(mx, my + sside, 0, 0);
-			t.addVertexWithUV(mx + sside, my + sside, 1, 0);
-			t.addVertexWithUV(mx + sside, my, 1, 1);
-			t.addVertexWithUV(mx, my, 0, 1);
-
-			t.draw();
+			AABB2 ab = new Vec2(mx, my + sside).extendBoth(sside / 2);
+			Graph.renderSqr(ab);
 		}
 		GL11.glPopMatrix();
 	}

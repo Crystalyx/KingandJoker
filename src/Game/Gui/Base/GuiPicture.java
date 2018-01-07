@@ -6,12 +6,12 @@ import Utilities.Color;
 
 public class GuiPicture extends GuiOBJ
 {
-	public GuiPicture(int x, int y, int sizex, int sizey, int type, Color c)
+	public GuiPicture(double x, double y, double sizex, double sizey, int type, Color c)
 	{
 		this.x = x;
 		this.y = y;
-		this.sizex = sizex;
-		this.sizey = sizey;
+		this.width = sizex;
+		this.height = sizey;
 		this.type = type;
 	}
 
@@ -33,7 +33,7 @@ public class GuiPicture extends GuiOBJ
 			int m = Math.floorMod(this.type, 8);
 			int d = Math.floorDiv(this.type, 8);
 
-			this.gui.drawTexturedModalRect((int) (-this.sizex / Math.PI * 2), (int) (-this.sizey / Math.PI * 2), m * 32, d * 32, this.sizex, this.sizey);
+			this.gui.drawTexturedModalRect((int) (-this.width / Math.PI * 2), (int) (-this.height / Math.PI * 2), m * 32, d * 32, this.width, this.height);
 			this.disableCustomTexture();
 			GL11.glPopMatrix();
 		}

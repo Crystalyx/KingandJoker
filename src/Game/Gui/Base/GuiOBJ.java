@@ -5,10 +5,10 @@ import Graphics.Icon;
 public class GuiOBJ
 {
 	public String name = "";
-	public int x = 0;
-	public int y = 0;
-	public int sizex = 0;
-	public int sizey = 0;
+	public double x = 0;
+	public double y = 0;
+	public double width = 0;
+	public double height = 0;
 	public int type = -1;
 	public boolean hidden = false;
 

@@ -221,6 +221,7 @@ public class FontRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
 		GL11.glScaled(0.125, 0.125, 1);
+		GL11.glRotated(180, 1, 0, 0);
 		Icon.getIcon("ascii").getTexture().bind();
 		char[] smbls = (s + "").toCharArray();
 		for (int i = 0; i < (s + "").length(); i++)
@@ -277,6 +278,7 @@ public class FontRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
 		GL11.glScaled(0.125, 0.125, 1);
+		GL11.glRotated(180, 1, 0, 0);
 		Icon.getIcon("ascii").getTexture().bind();
 		char[] smbls = (s + "").toCharArray();
 		for (int i = 0; i < smbls.length; i++)
@@ -307,6 +309,7 @@ public class FontRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
 		GL11.glScaled(0.125, 0.125, 1);
+		GL11.glRotated(180, 1, 0, 0);
 		Icon.getIcon("ascii").getTexture().bind();
 
 		for (int i = 0; i < s.length(); i++)

@@ -1,5 +1,9 @@
 package Core;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -16,9 +20,10 @@ import Game.Entities.Sparkler;
 import Game.Entities.Swarm;
 import Game.Entities.AI.AICentryFollow;
 import Game.Entities.API.EntityItem;
+import Game.Gui.Container;
 import Game.Gui.ContainerEquipment;
+import Game.Gui.InvUtils;
 import Game.Gui.Base.ContainerBase;
-import Game.Gui.Base.GuiBase;
 import Game.Gui.Base.ObjTypes;
 import Graphics.FontRenderer;
 import Graphics.Icon;
@@ -33,7 +38,6 @@ import Utilities.Utils;
 
 public class GUI
 {
-
 	public static final String SCREEN_NAME = "King And Joker";
 
 	public static final int SCREEN_WIDTH_BASE = 800;
@@ -57,8 +61,9 @@ public class GUI
 	public static int dx = 0, dy = 0;
 	public static int FPS = 60;
 	public static Tessellator t = Tessellator.instance;
-	public static GuiBase gui;
-	public static ContainerBase cont;
+	public static Container cont;
+
+	public static List<Focusable> screenObjs = new ArrayList<Focusable>();
 
 	public static long time = 0l;
 
@@ -110,43 +115,81 @@ public class GUI
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
-		// GL11.GL_NEAREST);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 		room.draw();
 
+		screenObjs.stream().filter(k -> k != focus).forEach(f -> f.drawGui(K, L));
+
+		/**
+		 * Drawing debug stuff
+		 */
 		if (focus != null)
 		{
 			focus.drawGui(K, L);
 
-			// if (gui != null)
-			// {
-			// gui.drawGui(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-			// }
-			AABB2 ab = GUI.focus.getMoveAABB(GUI.K, GUI.L);
-			// Logger.info(ab);
-			// Logger.info(new Vec2(Main.mpx, Main.mpy));
-
-			if (ab != null)
+			if (Binds.pressed(KIJCore.SETTINGS.keyDebug))
 			{
-				Graph.colorize(Color.Red);
-				Icon.sqr.bind();
-				Graph.renderAABB(ab);
-				Graph.clearColor();
-			}
-			GL11.glPopMatrix();
+				drawInterractionBBs(focus);
 
-			if (!inslot && Binds.leftClick)
-			{
-				if (guiis != null)
+				cont.buttons.stream().forEach(b ->
 				{
-					EntityItem ei = new EntityItem(KIJCore.p.pos, guiis);
-					ei.vel = new Vec2(Utils.getIntInRange(-4, 4), Utils.getIntInRange(1, 4));
-					ei.setTimer(30);
-					room.addObj(ei);
-					guiis = null;
-				}
+					AABB2 buab = new Vec2(b.x * 2.76 + K + focus.dx, (b.y - 13) * 2.76 + L + focus.dy).extend(b.width * 2.76, b.height * 2.76);
+					Graph.renderAABB(buab);
+				});
+
+				// Drawing mouse
+				AABB2 moab = new Vec2(KIJCore.mx, KIJCore.my).extend(20, 20);
+				Graph.renderSqr(moab);
+			}
+
+			/**
+			 * GuiButton Handling
+			 */
+			cont.buttons.stream().filter(b -> b.checkMouse()).peek(b -> b.mouseSelected(KIJCore.mx, KIJCore.my)).filter(b -> Binds.keyClick(KIJCore.SETTINGS.keyAttack)).forEach(b -> b.mousePressed(KIJCore.mx, KIJCore.my, 0));
+
+			// dropping from inventory
+			if (!inslot && Binds.leftClick && guiis != null)
+			{
+				EntityItem ei = new EntityItem(KIJCore.p.pos, guiis);
+				ei.vel = new Vec2(Utils.getIntInRange(-4, 4), Utils.getIntInRange(1, 4));
+				ei.setTimer(30);
+				room.addObj(ei);
+				guiis = null;
 			}
 		}
+		else
+		{
+			screenObjs = Utils.reverseList(screenObjs);
+			Optional<Focusable> of = screenObjs.stream().filter(k -> Utils.isInLimit(new Vec2(KIJCore.mx, KIJCore.my), k.getFocusAABB(K, L)) && Binds.pressed(KIJCore.SETTINGS.keyAttack)).findFirst();
+			screenObjs = Utils.reverseList(screenObjs);
+			if (of.isPresent())
+			{
+				focus = of.get();
+				cont = focus.getContainer();
+				screenObjs.remove(focus);
+				screenObjs.add(focus);
+				focus.onFocusing();
+			}
+		}
+
+		GL11.glPopMatrix();
+	}
+
+	private static void drawInterractionBBs(Focusable foc)
+	{
+		AABB2 ab = foc.getMoveAABB(GUI.K, GUI.L);
+
+		if (ab != null)
+		{
+			Graph.colorize(Color.Red);
+			Icon.sqr.bind();
+			Graph.renderAABB(ab);
+			Graph.clearColor();
+		}
+
+		Icon.sqr.bind();
+		Graph.renderAABB(foc.getFocusAABB(GUI.K, GUI.L));
+
 	}
 
 	public static void update()
@@ -158,11 +201,14 @@ public class GUI
 
 		if (Binds.keyClick(KIJCore.SETTINGS.keyWave))
 		{
-			KIJCore.p.inv.addItemStack(new ItemStack(Items.Laser));
-			KIJCore.p.inv.addItemStack(new ItemStack(Items.lightning_gun));
-			KIJCore.p.inv.addItemStack(new ItemStack(Items.flamethrw));
-			KIJCore.p.inv.addItemStack(new ItemStack(Items.cannon));
-			KIJCore.p.inv.addItemStack(new ItemStack(Items.GlassGun));
+			if (!InvUtils.contains(KIJCore.p.inv, Items.Laser))
+			{
+				KIJCore.p.inv.addItemStack(new ItemStack(Items.Laser));
+				KIJCore.p.inv.addItemStack(new ItemStack(Items.lightning_gun));
+				KIJCore.p.inv.addItemStack(new ItemStack(Items.flamethrw));
+				KIJCore.p.inv.addItemStack(new ItemStack(Items.cannon));
+				KIJCore.p.inv.addItemStack(new ItemStack(Items.GlassGun));
+			}
 
 			Border b = new Border(new Vec2(room.width / 2, room.height / 2), 50, 50, Icon.getIcon("border/glass"));
 			room.addBorder(b);
@@ -187,21 +233,26 @@ public class GUI
 
 		if (Binds.keyClick(KIJCore.SETTINGS.keyEquip))
 		{
-			if (cont != null)
+			if (focus != null && cont != null)
 			{
-				focus = null;
-				cont = null;
-				gui = null;
+				screenObjs.remove(focus);
+				removeFocus();
 			}
 			else
 			{
 				cont = new ContainerEquipment();
-				gui = new GuiEquipment(cont);
-				focus = gui;
+				focus = new GuiEquipment((ContainerBase) cont);
+				screenObjs.add(focus);
 			}
 		}
 
 		time++;
+	}
+
+	public static void removeFocus()
+	{
+		focus = null;
+		cont = null;
 	}
 
 	private static void updateOpenGL()
@@ -210,6 +261,5 @@ public class GUI
 		SCREEN_WIDTH = Display.getWidth();
 		SCREEN_HEIGHT = Display.getHeight();
 		Display.sync(FPS);
-
 	}
 }

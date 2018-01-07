@@ -7,10 +7,10 @@ import Utilities.Graph;
 
 public class GuiBackground extends GuiOBJ
 {
-	public GuiBackground(int x, int y, int sizex, int sizey)
+	public GuiBackground(double x, double y, double sizex, double sizey)
 	{
-		this.sizex = (int) (Math.ceil(sizex / 8d) * 8);
-		this.sizey = (int) (Math.ceil(sizey / 8d) * 8);
+		this.width = (int) (Math.ceil(sizex / 8d) * 8);
+		this.height = (int) (Math.ceil(sizey / 8d) * 8);
 		this.x = x;
 		this.y = y;
 	}
@@ -18,20 +18,19 @@ public class GuiBackground extends GuiOBJ
 	@Override
 	public void render(int k, int l)
 	{
-		int x = this.x;
-		int y = this.y + this.sizey / 2;
+		double x = this.x;
+		double y = this.y + this.height / 2;
 		GL11.glPushMatrix();
 		GL11.glTranslated(k, l, 0);
-		GL11.glScaled(2, 2, 1);
-		GL11.glScaled(1.38, 1.38, 1);
+		GL11.glScaled(2.76, 2.76, 1);
 		GL11.glTranslated(x + 2, y - 16, 0);
 
 		this.bindTexture();
 
-		Graph.drawSizedSqr(this.gui, 256, 256, 32, 32, this.sizex + 12, this.sizey, 224, 32, 8, 8);
+		Graph.drawSizedSqr(this.gui, 256, 256, 32, 32, this.width + 12, this.height, 224, 32, 8, 8);
 
 		Graph.colorize(Color.Green);
-		Graph.drawSizedSqr(this.gui, 256, 256, 32, 32, this.sizex + 12, this.gui.borderHeight, 224, 32, 8, 8);
+		Graph.drawSizedSqr(this.gui, 256, 256, 32, 32, this.width + 12, this.gui.borderHeight, 224, 32, 8, 8);
 		Graph.clearColor();
 
 		GL11.glPopMatrix();

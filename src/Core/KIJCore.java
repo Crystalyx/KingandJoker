@@ -24,18 +24,14 @@ public class KIJCore
 	public static final Settings SETTINGS = new Settings();
 	public static final Configuration cfg = new Configuration();
 	public static final int slowness = 20;
-	public static boolean tickFox = false;
 
 	public static void main(String[] args)
 	{
 		init(args);
-		TypeUtils.initStr();
-
 		while (!isExitRequested)
 		{
 			update();
 		}
-
 		destruct();
 	}
 
@@ -62,39 +58,27 @@ public class KIJCore
 		{
 			if (GUI.focus != null)
 			{
-				if (GUI.focus.canFocus())
+				if (Utils.isInLimit(new Vec2(mx, my), GUI.focus.getMoveAABB(GUI.K, GUI.L)))
 				{
 					GUI.focus.input();
 				}
-				else
+				if (Utils.isInLimit(new Vec2(mx, my), GUI.focus.getFocusAABB(GUI.K, GUI.L)))
 				{
-					GUI.focus = null;
+					GUI.removeFocus();
 				}
 			}
 			else
 				input();
-			tickFox = false;
-
-			if (GUI.focus != null && Utils.isInLimit(new Vec2(mx, my), GUI.focus.getMoveAABB(GUI.K, GUI.L)))
-			{
-				if (!tickFox)
-				{
-					tickFox = true;
-				}
-			}
-			if (!tickFox)
-				GUI.focus = null;
 		}
 		else
 			if (GUI.focus == null)
 				input();
 
-		pause = (GUI.gui != null && GUI.gui.pause);
+		pause = (GUI.focus != null && GUI.focus.pause);
 		if (!pause)
 		{
 			GUI.room.updateRoom();
 
-			// p.update();
 		}
 		if (!GUI.room.objs.contains(p))
 		{
@@ -108,7 +92,6 @@ public class KIJCore
 			}
 		}
 		isExitRequested = isExitRequested || Display.isCloseRequested() || (Binds.pressed(Keyboard.KEY_LSHIFT) && Binds.pressed(Keyboard.KEY_ESCAPE));
-
 	}
 
 	public static void destruct()
@@ -165,5 +148,4 @@ public class KIJCore
 			p.vel.x = -p.maxVelocity.x;
 		}
 	}
-
 }
