@@ -3,14 +3,14 @@ package Utilities;
 import org.lwjgl.opengl.GL11;
 
 import API.Focusable;
-import Core.GUI;
+import Core.Screen;
 import Graphics.Icon;
 import Math.Matrix.Matrix2;
 import Math.Vec.Vec2;
 
 public class Graph
 {
-	public static Tessellator t = GUI.t;
+	public static Tessellator t = Screen.t;
 
 	public static void colorize(Color c)
 	{

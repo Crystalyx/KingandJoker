@@ -2,7 +2,7 @@ package Game.Items;
 
 import org.lwjgl.input.Mouse;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.Player;
 import Game.Entities.API.Damage;
 import Game.Entities.API.EntityLiving;
@@ -32,7 +32,7 @@ public class Cannon extends ItemGun
 			double a = Math.atan2(dy, dx);
 
 			s.setVelocity(Utils.getPosByAngle(a, 10));
-			GUI.room.addObj(s);
+			Screen.room.addObj(s);
 		}
 	}
 

@@ -2,7 +2,7 @@ package Game.Entities.Throwable;
 
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Action;
 import Game.Entities.InductiveCore;
 import Game.Entities.API.Damage;
@@ -43,7 +43,7 @@ public class InducedMithrillium extends EntityThrowable
 	{
 		super.update(time);
 		Vec2 v = this.pos.sub(new Vec2(this.width / 2, 0));
-		List<EntityLiving> l = GUI.room.getLivingEntitiesWithinSquareExcluding(InductiveCore.class, v.extend(new Vec2(this.width, this.height)));
+		List<EntityLiving> l = Screen.room.getLivingEntitiesWithinSquareExcluding(InductiveCore.class, v.extend(new Vec2(this.width, this.height)));
 		EntityLiving nrst = null;
 		double min = 10000;
 		for (EntityLiving el : l)

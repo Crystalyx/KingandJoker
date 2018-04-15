@@ -3,7 +3,7 @@ package Graphics.Render;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import Core.GUI;
+import Core.Screen;
 import Core.KIJCore;
 import Game.ItemStack;
 import Game.Entities.API.Entity;
@@ -57,7 +57,7 @@ public class PlayerRender extends Render
 		Vec2 v = KIJCore.p.pos;
 		GL11.glTranslated(v.x, v.y, 0);
 		GL11.glScaled(1.5, 1.5, 1.5);
-		AABB2 ab = new Vec2().extendBoth(GUI.PLAYER_WIDTH / 2, GUI.PLAYER_HEIGHT / 2);
+		AABB2 ab = new Vec2().extendBoth(Screen.PLAYER_WIDTH / 2, Screen.PLAYER_HEIGHT / 2);
 
 		int mx = Mouse.getX();
 		int my = Mouse.getY();

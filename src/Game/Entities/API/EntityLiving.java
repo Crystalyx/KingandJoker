@@ -3,7 +3,7 @@ package Game.Entities.API;
 import java.util.ArrayList;
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.AI.AI;
 import Game.Entities.Modifiers.SharedModifiers;
 import Graphics.Icon;
@@ -83,7 +83,7 @@ public class EntityLiving extends Entity
 	{
 		super.update(time);
 
-		if (GUI.time % 4 == 0)
+		if (Screen.time % 4 == 0)
 		{
 			if (this.isOnFire && this.fireTick > 0 && this.fireHeat > 0)
 			{

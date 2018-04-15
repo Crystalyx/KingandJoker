@@ -1,10 +1,10 @@
 package Game.Gui;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Gui.Base.ContainerBase;
 import Game.Gui.Base.GuiButton;
 import Game.Gui.Base.GuiSwitch;
-import Game.Gui.Base.GuiText;
+import Utilities.Logger;
 
 public class ContainerEquipment extends ContainerBase
 {
@@ -33,21 +33,22 @@ public class ContainerEquipment extends ContainerBase
 		this.addPlayerSlots(-48, 47);
 		this.addSlot(0, 12, new InventoryTrashCan(), 100, 31.5d);
 
-		GuiSwitch butt = new GuiSwitch(-128, -42, 16, 6)
+		GuiSwitch butt = new GuiSwitch(-128, -42, 36, 6)
 		{
 			@Override
-			public boolean mousePressed(double x, double y, int button)
+			public boolean mouseClicked(double x, double y, int button)
 			{
-				if (GUI.focus != null)
-					GUI.focus.pause = !GUI.focus.pause;
+				if (Screen.focus != null)
+					Screen.focus.pause = !Screen.focus.pause;
 				this.switchState();
+				Logger.info("Switch");
 				return true;
 			}
 
 			@Override
 			public boolean getState()
 			{
-				return GUI.focus.pause;
+				return Screen.focus.pause;
 			}
 		};
 		this.addButton(butt);
@@ -59,8 +60,8 @@ public class ContainerEquipment extends ContainerBase
 			@Override
 			public boolean mousePressed(double x, double y, int button)
 			{
-				GUI.screenObjs.remove(this.gui);
-				GUI.removeFocus();
+				Screen.screenObjs.remove(this.gui);
+				Screen.removeFocus();
 
 				return true;
 			}

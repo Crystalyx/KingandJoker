@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Action;
 import Game.ItemStack;
 import Game.Entities.Modifiers.Modifier;
@@ -72,7 +72,7 @@ public class Entity
 		{
 			if (!this.onDeath(this.lastAttacked))
 			{
-				this.setDead(false);
+				this.isDead = false;
 			}
 		}
 	}
@@ -98,7 +98,7 @@ public class Entity
 		{
 			EntityItem ei = new EntityItem(this.pos, i);
 			ei.vel = new Vec2(Utils.getIntInRange(-8, 8), Utils.getIntInRange(1, 8));
-			GUI.room.addObj(ei);
+			Screen.room.addObj(ei);
 		}
 		return true;
 	}

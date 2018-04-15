@@ -2,7 +2,7 @@ package Game.Items;
 
 import org.lwjgl.input.Mouse;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.Player;
 import Game.Entities.API.EntityLiving;
 import Game.Items.API.ItemGun;
@@ -22,7 +22,7 @@ public class GlassGun extends ItemGun
 		int mx = Mouse.getX();
 		int my = Mouse.getY();
 
-		GUI.room.leverBorder(Math.floorDiv(mx + 25, 50), Math.floorDiv(my + 25, 50));
+		Screen.room.leverBorder(Math.floorDiv(mx + 25, 50), Math.floorDiv(my + 25, 50));
 	}
 
 }

@@ -2,7 +2,7 @@ package Graphics.Render;
 
 import org.lwjgl.opengl.GL11;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.API.Entity;
 import Graphics.Icon;
 import Utilities.Tessellator;
@@ -14,7 +14,7 @@ public class SparklerRender extends Render
 	public void render(Entity obj)
 	{
 		GL11.glPushMatrix();
-		Tessellator t = GUI.t;
+		Tessellator t = Screen.t;
 		Icon s0 = Icon.getIcon("mobs/sparkler_0");
 		Icon s1 = Icon.getIcon("mobs/sparkler_1");
 		Icon s2 = Icon.getIcon("mobs/sparkler_2");
@@ -23,9 +23,9 @@ public class SparklerRender extends Render
 
 		double dh = obj.height;
 		double dw = obj.width / 2;
-		double dx0 = 10 * Math.sin(-(GUI.time + life) / 16d);
-		double dx1 = 10 * Math.sin(-(GUI.time + life) / 16d + Math.PI / 3);
-		double dx2 = 10 * Math.sin(-(GUI.time + life) / 16d + 2 * Math.PI / 3);
+		double dx0 = 10 * Math.sin(-(Screen.time + life) / 16d);
+		double dx1 = 10 * Math.sin(-(Screen.time + life) / 16d + Math.PI / 3);
+		double dx2 = 10 * Math.sin(-(Screen.time + life) / 16d + 2 * Math.PI / 3);
 
 		GL11.glTranslated(obj.pos.x, obj.pos.y, 0);
 		GL11.glScaled(1.5, 1.5, 1);

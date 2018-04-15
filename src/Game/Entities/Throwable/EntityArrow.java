@@ -2,7 +2,7 @@ package Game.Entities.Throwable;
 
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Action;
 import Game.Entities.API.Damage;
 import Game.Entities.API.Entity;
@@ -43,7 +43,7 @@ public class EntityArrow extends EntityThrowable
 	{
 		super.update(time);
 		Vec2 v = this.pos;
-		List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(EntityLiving.class, v.extend(new Vec2(this.width, this.height)));
+		List<EntityLiving> l = Screen.room.getEntitiesWithinSquare(EntityLiving.class, v.extend(new Vec2(this.width, this.height)));
 		l.remove(this.sender);
 		EntityLiving nrst = null;
 		double min = 10000;

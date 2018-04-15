@@ -42,45 +42,45 @@ public class KIJCore
 		cfg.readConfig();
 		SETTINGS.load();
 		p = new Player();
-		GUI.init();
+		Screen.init();
 		Registry.init();
 		Keyboard.enableRepeatEvents(true);
 	}
 
 	public static void update()
 	{
-		GUI.draw();
-		GUI.update();
+		Screen.draw();
+		Screen.update();
 		Binds.update();
 		updateMouse();
 
 		if (Binds.pressed(SETTINGS.keyAttack))
 		{
-			if (GUI.focus != null)
+			if (Screen.focus != null)
 			{
-				if (Utils.isInLimit(new Vec2(mx, my), GUI.focus.getMoveAABB(GUI.K, GUI.L)))
+				if (Utils.isInLimit(new Vec2(mx, my), Screen.focus.getMoveAABB(Screen.K, Screen.L)))
 				{
-					GUI.focus.input();
+					Screen.focus.input();
 				}
-				if (Utils.isInLimit(new Vec2(mx, my), GUI.focus.getFocusAABB(GUI.K, GUI.L)))
+				if (Utils.isInLimit(new Vec2(mx, my), Screen.focus.getFocusAABB(Screen.K, Screen.L)))
 				{
-					GUI.removeFocus();
+					Screen.removeFocus();
 				}
 			}
 			else
 				input();
 		}
 		else
-			if (GUI.focus == null)
+			if (Screen.focus == null)
 				input();
 
-		pause = (GUI.focus != null && GUI.focus.pause);
+		pause = (Screen.focus != null && Screen.focus.pause);
 		if (!pause)
 		{
-			GUI.room.updateRoom();
+			Screen.room.updateRoom();
 
 		}
-		if (!GUI.room.objs.contains(p))
+		if (!Screen.room.objs.contains(p))
 		{
 			if (Binds.keyClick(Keyboard.KEY_L))
 			{
@@ -88,7 +88,7 @@ public class KIJCore
 				p.energy = p.maxenergy;
 				p.lifeTime = 0;
 				p.setDead(false);
-				GUI.room.objs.add(p);
+				Screen.room.objs.add(p);
 			}
 		}
 		isExitRequested = isExitRequested || Display.isCloseRequested() || (Binds.pressed(Keyboard.KEY_LSHIFT) && Binds.pressed(Keyboard.KEY_ESCAPE));

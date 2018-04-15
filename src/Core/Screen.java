@@ -3,6 +3,7 @@ package Core;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -24,6 +25,7 @@ import Game.Gui.Container;
 import Game.Gui.ContainerEquipment;
 import Game.Gui.InvUtils;
 import Game.Gui.Base.ContainerBase;
+import Game.Gui.Base.GuiButton;
 import Game.Gui.Base.ObjTypes;
 import Graphics.FontRenderer;
 import Graphics.Icon;
@@ -36,7 +38,7 @@ import Utilities.Graph;
 import Utilities.Tessellator;
 import Utilities.Utils;
 
-public class GUI
+public class Screen
 {
 	public static final String SCREEN_NAME = "King And Joker";
 
@@ -145,7 +147,13 @@ public class GUI
 			/**
 			 * GuiButton Handling
 			 */
-			cont.buttons.stream().filter(b -> b.checkMouse()).peek(b -> b.mouseSelected(KIJCore.mx, KIJCore.my)).filter(b -> Binds.keyClick(KIJCore.SETTINGS.keyAttack)).forEach(b -> b.mousePressed(KIJCore.mx, KIJCore.my, 0));
+			Stream<GuiButton> butstream = cont.buttons.stream().filter(b -> b.checkMouse()).peek(b -> b.mouseSelected(KIJCore.mx, KIJCore.my));
+			if (Binds.keyClick(KIJCore.SETTINGS.keyAttack))
+				butstream = butstream.peek(b -> b.mouseClicked(KIJCore.mx, KIJCore.my, 0));
+			if (Binds.pressed(KIJCore.SETTINGS.keyAttack))
+				butstream = butstream.peek(b -> b.mousePressed(KIJCore.mx, KIJCore.my, 0));
+
+			butstream.close();
 
 			// dropping from inventory
 			if (!inslot && Binds.leftClick && guiis != null)
@@ -159,16 +167,19 @@ public class GUI
 		}
 		else
 		{
-			screenObjs = Utils.reverseList(screenObjs);
-			Optional<Focusable> of = screenObjs.stream().filter(k -> Utils.isInLimit(new Vec2(KIJCore.mx, KIJCore.my), k.getFocusAABB(K, L)) && Binds.pressed(KIJCore.SETTINGS.keyAttack)).findFirst();
-			screenObjs = Utils.reverseList(screenObjs);
-			if (of.isPresent())
+			if (Binds.pressed(KIJCore.SETTINGS.keyAttack))
 			{
-				focus = of.get();
-				cont = focus.getContainer();
-				screenObjs.remove(focus);
-				screenObjs.add(focus);
-				focus.onFocusing();
+				screenObjs = Utils.reverseList(screenObjs);
+				Optional<Focusable> of = screenObjs.stream().filter(k -> Utils.isInLimit(new Vec2(KIJCore.mx, KIJCore.my), k.getFocusAABB(K, L))).findFirst();
+				screenObjs = Utils.reverseList(screenObjs);
+				if (of.isPresent())
+				{
+					focus = of.get();
+					cont = focus.getContainer();
+					screenObjs.remove(focus);
+					screenObjs.add(focus);
+					focus.onFocusing();
+				}
 			}
 		}
 
@@ -177,7 +188,7 @@ public class GUI
 
 	private static void drawInterractionBBs(Focusable foc)
 	{
-		AABB2 ab = foc.getMoveAABB(GUI.K, GUI.L);
+		AABB2 ab = foc.getMoveAABB(Screen.K, Screen.L);
 
 		if (ab != null)
 		{
@@ -188,7 +199,7 @@ public class GUI
 		}
 
 		Icon.sqr.bind();
-		Graph.renderAABB(foc.getFocusAABB(GUI.K, GUI.L));
+		Graph.renderAABB(foc.getFocusAABB(Screen.K, Screen.L));
 
 	}
 
@@ -216,17 +227,17 @@ public class GUI
 			for (int i = 0; i < Utils.r.nextInt(20); i++)
 			{
 				Sparkler s = new Sparkler(new Vec2(180, 280 + i * 6));
-				GUI.room.addObj(s);
+				Screen.room.addObj(s);
 			}
 			for (int i = 0; i < Utils.r.nextInt(20); i++)
 			{
 				InductiveCore s = new InductiveCore(new Vec2(180, 280 + i * 6));
-				GUI.room.addObj(s);
+				Screen.room.addObj(s);
 			}
 			for (int i = 0; i < Utils.r.nextInt(20); i++)
 			{
 				Swarm s = new Swarm(new Vec2(180, 280 + i * 6));
-				GUI.room.addObj(s);
+				Screen.room.addObj(s);
 				((AICentryFollow) s.ais.get(1)).setCentry(KIJCore.p, new Vec2(0, 32));
 			}
 		}

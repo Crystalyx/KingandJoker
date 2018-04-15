@@ -1,7 +1,7 @@
 package GUI;
 
 import API.Focusable;
-import Core.GUI;
+import Core.Screen;
 import Core.KIJCore;
 import UCS.GuiEvent;
 import UCS.GuiEvent.RenderType;
@@ -11,7 +11,7 @@ public class GuiHud extends Focusable
 
 	public GuiHud()
 	{
-		super(GUI.SCREEN_WIDTH, GUI.SCREEN_HEIGHT);
+		super(Screen.SCREEN_WIDTH, Screen.SCREEN_HEIGHT);
 	}
 
 	@Override

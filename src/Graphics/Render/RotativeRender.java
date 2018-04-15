@@ -2,7 +2,7 @@ package Graphics.Render;
 
 import org.lwjgl.opengl.GL11;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.API.Entity;
 import Utilities.Tessellator;
 
@@ -12,7 +12,7 @@ public class RotativeRender extends Render
 	@Override
 	public void render(Entity obj)
 	{
-		Tessellator t = GUI.t;
+		Tessellator t = Screen.t;
 
 		if (obj.getSprite() != null)
 		{

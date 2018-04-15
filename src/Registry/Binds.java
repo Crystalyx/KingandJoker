@@ -30,7 +30,7 @@ public class Binds
 		Enumeration<Integer> en = clicks.keys();
 		while (en.hasMoreElements())
 		{
-			Integer key = (Integer) en.nextElement();
+			Integer key = en.nextElement();
 			if (key != MOUSE_LEFT && key != MOUSE_MIDDLE && key != MOUSE_RIGHT)
 			{
 				if (Keyboard.isKeyDown(key))

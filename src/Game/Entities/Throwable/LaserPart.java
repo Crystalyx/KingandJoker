@@ -2,7 +2,7 @@ package Game.Entities.Throwable;
 
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Action;
 import Game.Entities.API.Damage;
 import Game.Entities.API.Entity;
@@ -45,7 +45,7 @@ public class LaserPart extends EntityThrowable
 	{
 		super.update(time);
 		AABB2 v = this.pos.extendBoth(new Vec2(this.width / 2, this.height / 2));
-		List<EntityLiving> l = GUI.room.getEntitiesWithinSquare(EntityLiving.class, v);
+		List<EntityLiving> l = Screen.room.getEntitiesWithinSquare(EntityLiving.class, v);
 		l.remove(this);
 		l.remove(this.sender);
 		EntityLiving nrst = null;

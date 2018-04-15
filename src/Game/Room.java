@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import Core.GUI;
+import Core.Screen;
 import Core.KIJCore;
 import Game.Entities.Player;
 import Game.Entities.API.Entity;
@@ -27,15 +27,15 @@ public class Room
 {
 	public List<Entity> objs = new ArrayList<Entity>();
 	public List<Border> bords = new ArrayList<Border>();
-	public Border[][] gunbords = new Border[1 + GUI.SCREEN_WIDTH / 50][1 + GUI.SCREEN_HEIGHT / 50];
+	public Border[][] gunbords = new Border[1 + Screen.SCREEN_WIDTH / 50][1 + Screen.SCREEN_HEIGHT / 50];
 
-	public int width = GUI.SCREEN_WIDTH;
-	public int height = GUI.SCREEN_HEIGHT - 150;
+	public int width = Screen.SCREEN_WIDTH;
+	public int height = Screen.SCREEN_HEIGHT - 150;
 	public int slowness = 100;
 
 	public Room()
 	{
-		height = GUI.SCREEN_HEIGHT - 150;
+		height = Screen.SCREEN_HEIGHT - 150;
 	}
 
 	public Room(int width, int height, int slowness)
@@ -71,7 +71,7 @@ public class Room
 		else
 		{
 			Border b = new Border(new Vec2(Math.floorDiv(x * 50 + 25, 50) * 50, Math.floorDiv(y * 50 + 25, 50) * 50), 50, 50, Icon.getIcon("border/metal"));
-			GUI.room.addBorder(b);
+			Screen.room.addBorder(b);
 			gunbords[x][y] = b;
 		}
 	}
@@ -83,7 +83,7 @@ public class Room
 
 	public void draw()
 	{
-		Tessellator t = GUI.t;
+		Tessellator t = Screen.t;
 
 		// Icon.sky.getTexture().bind();
 
@@ -171,7 +171,7 @@ public class Room
 			}
 			else
 			{
-				obj.update(GUI.time);
+				obj.update(Screen.time);
 				if (EntityRegistry.movingEntities.contains(obj.getClass()))
 				{
 					for (int i = 0; i < slowness; i++)
@@ -305,8 +305,8 @@ public class Room
 		t.start(GL11.GL_QUAD_STRIP);
 		t.addVertexWithUV(v.x - 1, 0, 0, 0);
 		t.addVertexWithUV(v.x + 1, 0, 1, 0);
-		t.addVertexWithUV(v.x + 1, GUI.SCREEN_HEIGHT, 1, 1);
-		t.addVertexWithUV(v.x - 1, GUI.SCREEN_HEIGHT, 0, 1);
+		t.addVertexWithUV(v.x + 1, Screen.SCREEN_HEIGHT, 1, 1);
+		t.addVertexWithUV(v.x - 1, Screen.SCREEN_HEIGHT, 0, 1);
 		t.draw();
 
 		int mx = (Mouse.getX());
@@ -322,8 +322,8 @@ public class Room
 		t.start(GL11.GL_QUAD_STRIP);
 		t.addVertexWithUV(0, v.y - 1 + obj.height / 2, 0, 0);
 		t.addVertexWithUV(1, v.y + 1 + obj.height / 2, 0, 0);
-		t.addVertexWithUV(GUI.SCREEN_WIDTH, v.y + 1 + obj.height / 2, 1, 1);
-		t.addVertexWithUV(GUI.SCREEN_WIDTH, v.y - 1 + obj.height / 2, 0, 1);
+		t.addVertexWithUV(Screen.SCREEN_WIDTH, v.y + 1 + obj.height / 2, 1, 1);
+		t.addVertexWithUV(Screen.SCREEN_WIDTH, v.y - 1 + obj.height / 2, 0, 1);
 		t.draw();
 
 		Vec2 vaabb = obj.pos.sub(new Vec2(obj.width / 2, obj.height / 2));

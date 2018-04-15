@@ -7,7 +7,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import API.Focusable;
-import Core.GUI;
+import Core.Screen;
 import Core.KIJCore;
 import Game.ItemStack;
 import Game.Entities.API.EntityItem;
@@ -54,7 +54,7 @@ public class GuiContainer extends Focusable
 
 	public void drawSlots(int k, int l)
 	{
-		Tessellator t = GUI.t;
+		Tessellator t = Screen.t;
 
 		GL11.glPushMatrix();
 
@@ -93,7 +93,7 @@ public class GuiContainer extends Focusable
 				{
 					GL11.glColor4d(1, 1, 1, 0.5);
 
-					GUI.inslot = true;
+					Screen.inslot = true;
 					Icon.sqr.getTexture().bind();
 					t.start(GL11.GL_QUADS);
 
@@ -106,11 +106,11 @@ public class GuiContainer extends Focusable
 
 					if (Binds.leftClick)
 					{
-						if (slot.inv.isItemValidForSlot(slot.id, GUI.guiis))
+						if (slot.inv.isItemValidForSlot(slot.id, Screen.guiis))
 						{
 							ItemStack ps = slot.getStack();
-							slot.setStack(GUI.guiis);
-							GUI.guiis = ps;
+							slot.setStack(Screen.guiis);
+							Screen.guiis = ps;
 						}
 					}
 					GL11.glColor4d(1, 1, 1, 1);
@@ -156,23 +156,23 @@ public class GuiContainer extends Focusable
 			}
 		}
 
-		if (!GUI.inslot && Binds.leftClick)
+		if (!Screen.inslot && Binds.leftClick)
 		{
 			// TODO
-			if (GUI.guiis != null)
+			if (Screen.guiis != null)
 			{
-				EntityItem ei = new EntityItem(KIJCore.p.pos, GUI.guiis);
+				EntityItem ei = new EntityItem(KIJCore.p.pos, Screen.guiis);
 				ei.vel = new Vec2(Utils.getIntInRange(-4, 4), Utils.getIntInRange(1, 4));
 				ei.setTimer(30);
-				GUI.room.addObj(ei);
-				GUI.guiis = null;
+				Screen.room.addObj(ei);
+				Screen.guiis = null;
 			}
 		}
 
 		GL11.glPopMatrix();
-		if (GUI.guiis != null)
+		if (Screen.guiis != null)
 		{
-			GUI.guiis.item.icon.getTexture().bind();
+			Screen.guiis.item.icon.getTexture().bind();
 
 			AABB2 ab = new Vec2(mx, my + sside).extendBoth(sside / 2);
 			Graph.renderSqr(ab);

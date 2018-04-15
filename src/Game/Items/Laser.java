@@ -2,7 +2,7 @@ package Game.Items;
 
 import org.lwjgl.input.Mouse;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.Player;
 import Game.Entities.API.Damage;
 import Game.Entities.API.EntityLiving;
@@ -36,7 +36,7 @@ public class Laser extends ItemGun
 				Vec2 np = Utils.getPosByAngle(a, 14 * i);
 				s.pos = s.pos.add(np);
 
-				GUI.room.addObj(s);
+				Screen.room.addObj(s);
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public class Laser extends ItemGun
 				Vec2 np = Utils.getPosByAngle(a, 14 * i);
 				s.pos = s.pos.add(np);
 
-				GUI.room.addObj(s);
+				Screen.room.addObj(s);
 			}
 		}
 	}

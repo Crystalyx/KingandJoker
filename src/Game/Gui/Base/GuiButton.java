@@ -2,7 +2,7 @@ package Game.Gui.Base;
 
 import org.lwjgl.opengl.GL11;
 
-import Core.GUI;
+import Core.Screen;
 import Core.KIJCore;
 import Math.Vec.Vec2;
 import Utilities.Graph;
@@ -46,6 +46,11 @@ public class GuiButton extends GuiOBJ
 		return true;
 	}
 
+	public boolean mouseClicked(double x, double y, int button)
+	{
+		return true;
+	}
+
 	public boolean mousePressed(double x, double y, int button)
 	{
 		return true;
@@ -53,6 +58,6 @@ public class GuiButton extends GuiOBJ
 
 	public boolean checkMouse()
 	{
-		return Utils.isInLimit(new Vec2(KIJCore.mx, KIJCore.my), new Vec2(this.x * 2.76 + GUI.K + GUI.focus.dx, (this.y - 13) * 2.76 + GUI.L + GUI.focus.dy).extend(this.width * 2.76, this.height * 2.76));
+		return Utils.isInLimit(new Vec2(KIJCore.mx, KIJCore.my), new Vec2(this.x * 2.76 + Screen.K + Screen.focus.dx, (this.y - 13) * 2.76 + Screen.L + Screen.focus.dy).extend(this.width * 2.76, this.height * 2.76));
 	}
 }

@@ -3,7 +3,7 @@ package Game.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Core.KIJCore;
 import Game.ItemStack;
 import Game.Skill;
@@ -28,7 +28,7 @@ public class Player extends EntityLiving
 
 	public Player()
 	{
-		super(new Vec2(0, 190), GUI.PLAYER_WIDTH, GUI.PLAYER_HEIGHT);
+		super(new Vec2(0, 190), Screen.PLAYER_WIDTH, Screen.PLAYER_HEIGHT);
 		this.maxVelocity = new Vec2(480, 360);
 		this.applyModifier(new Modifier(SharedModifiers.Energy, "Player", 180, 0));
 	}
@@ -80,7 +80,7 @@ public class Player extends EntityLiving
 		// this.ableToFly = InvUtils.contains(equip, Items.flybook);
 
 		Vec2 v = this.pos.add(new Vec2(0, this.height / 2));
-		List<Entity> l = GUI.room.getEntitiesWithinSquare(Entity.class, v.extendBoth(new Vec2(this.width, this.height)));
+		List<Entity> l = Screen.room.getEntitiesWithinSquare(Entity.class, v.extendBoth(new Vec2(this.width, this.height)));
 
 		l.remove(this);
 		if (Binds.keyClick(KIJCore.SETTINGS.keyAttack))

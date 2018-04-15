@@ -2,7 +2,7 @@ package Game.Entities;
 
 import java.util.List;
 
-import Core.GUI;
+import Core.Screen;
 import Game.ItemStack;
 import Game.Entities.AI.AIRangedAttack;
 import Game.Entities.AI.AIRangedFollow;
@@ -52,7 +52,7 @@ public class Sparkler extends EntityLiving implements IRangedAttacker
 		b.tgp = target.pos;
 		ev.normalize();
 		b.setVelocity(ev.mult(8));
-		GUI.room.addObj(b);
+		Screen.room.addObj(b);
 		return true;
 	}
 

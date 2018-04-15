@@ -1,6 +1,6 @@
 package Game.Entities;
 
-import Core.GUI;
+import Core.Screen;
 import Game.Entities.AI.AIRangedAttack;
 import Game.Entities.AI.AIRangedFollow;
 import Game.Entities.API.Damage;
@@ -55,7 +55,7 @@ public class InductiveCore extends EntityLiving implements IRangedAttacker
 		{
 			IM[i] = new InducedMithrillium(this, i, new Damage().setEntityDamage(this, 20), IMP[i]);
 
-			GUI.room.addObj(IM[i]);
+			Screen.room.addObj(IM[i]);
 		}
 	}
 
